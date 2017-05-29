@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Coordinates</string>
+    <string name="coordinate_x">Coordinate X</string>
+    <string name="coordinate_y">Coordinate Y</string>
+    <string name="type_coordinate">Type of coordinate to insert</string>
+    <string name="radius">Radius</string>
+    <string name="invalid_field">Invalid Field</string>
+
 </resources>

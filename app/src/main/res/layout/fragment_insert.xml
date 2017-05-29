@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    tools:context="com.orsomob.coordinates.activitys.MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Switch
+            android:id="@+id/sw_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="@string/type_coordinate"/>
+
+        <LinearLayout
+            android:id="@+id/ll_cartesian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/sw_main"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_x"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="1dp"
+                android:layout_weight="1"
+                android:hint="@string/coordinate_x">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/ed_x"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_y"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="1dp"
+                android:layout_weight="1"
+                android:hint="@string/coordinate_y">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/ed_y"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/btn_insert"
+                    android:layout_alignStart="@+id/btn_insert"
+                    android:inputType="numberDecimal"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_polar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/sw_main"
+            android:layout_centerHorizontal="true"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:visibility="invisible">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_radius"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="1dp"
+                android:layout_weight="1"
+                android:hint="@string/radius">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/ed_radius"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_angle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="1dp"
+                android:layout_weight="1"
+                android:hint="Angle">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/ed_angle"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/btn_insert"
+                    android:layout_alignStart="@+id/btn_insert"
+                    android:inputType="numberDecimal"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_speed_direction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_cartesian"
+            android:layout_centerHorizontal="true"
+            android:baselineAligned="false">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_speed"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="1dp"
+                android:layout_weight="1"
+                android:hint="Speed">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/ed_speed"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_direction"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="1dp"
+                android:layout_weight="1"
+                android:hint="Direction">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/ed_direction"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/btn_insert"
+                    android:layout_alignStart="@+id/btn_insert"
+                    android:inputType="numberDecimal"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</ScrollView>

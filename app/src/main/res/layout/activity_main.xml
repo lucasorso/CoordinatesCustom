@@ -5,21 +5,26 @@
     android:id="@+id/rl_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.orsomob.coordinates.MainActivity">
+    tools:context="com.orsomob.coordinates.activitys.MainActivity">
+
 
     <com.orsomob.coordinates.GraphView
-        android:id="@+id/graphView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:id="@+id/gf_main"
+        android:layout_width="372dp"
+        android:layout_height="300dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="center"
+        android:layout_margin="8dp"/>
 
-    <!--<com.jjoe64.graphview.GraphView
-        android:id="@+id/graphView"
+    <fragment
+        android:id="@+id/fr_main_insert_remove"
+        android:name="com.orsomob.coordinates.fragments.InsertFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>-->
-
-    <!--<com.github.mikephil.charting.charts.ScatterChart
-        android:id="@+id/graphView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>-->
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/gf_main"
+        android:layout_marginTop="19dp"
+        tools:layout="@layout/fragment_insert"/>
 
 </RelativeLayout>

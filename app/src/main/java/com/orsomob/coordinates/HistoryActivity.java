@@ -9,7 +9,7 @@ import android.view.Menu;
  * Created by LucasOrso on 5/14/17.
  */
 
-public class History extends AppCompatActivity {
+public class HistoryActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
