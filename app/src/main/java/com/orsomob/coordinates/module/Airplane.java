@@ -15,11 +15,9 @@ public class Airplane extends RealmObject{
     public static String sAirplane = "Airplane";
 
     @PrimaryKey
-    @Required
     private Long mId;
 
-    @Required
-    private String mName;
+    private String mName = "Airplane ";
 
     @Required
     private Float mDirection;

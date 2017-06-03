@@ -42,7 +42,7 @@
                     android:id="@+id/ed_x"
                     android:layout_width="140dp"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"/>
+                    android:inputType="numberDecimal|numberSigned"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -60,7 +60,7 @@
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/btn_insert"
                     android:layout_alignStart="@+id/btn_insert"
-                    android:inputType="numberDecimal"/>
+                    android:inputType="numberDecimal|numberSigned"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -88,7 +88,7 @@
                     android:id="@+id/ed_radius"
                     android:layout_width="140dp"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"/>
+                    android:inputType="numberDecimal|numberSigned"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -106,7 +106,7 @@
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/btn_insert"
                     android:layout_alignStart="@+id/btn_insert"
-                    android:inputType="numberDecimal"/>
+                    android:inputType="numberDecimal|numberSigned"/>
 
             </android.support.design.widget.TextInputLayout>
 

@@ -1,4 +1,4 @@
-package com.orsomob.coordinates;
+package com.orsomob.coordinates.activitys;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+
+import com.orsomob.coordinates.R;
 
 /**
  * Created by LucasOrso on 5/19/17.

@@ -18,9 +18,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activitys.MainActivity"/>
-        <activity android:name=".InsertRemove"/>
-        <activity android:name=".RotationActivity"/>
+        <activity android:name=".activitys.MainActivity"
+                  android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity android:name=".activitys.RotationActivity"/>
+        <activity android:name=".activitys.HistoryActivity"/>
     </application>
 
 </manifest>
