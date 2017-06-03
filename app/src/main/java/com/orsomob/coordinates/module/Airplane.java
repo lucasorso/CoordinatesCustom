@@ -12,19 +12,32 @@ import io.realm.annotations.Required;
 @RealmClass
 public class Airplane extends RealmObject{
 
+    public static String sAirplane = "Airplane";
+
     @PrimaryKey
     @Required
     private Long mId;
+
     @Required
     private String mName;
+
     @Required
-    private Long mDirection;
+    private Float mDirection;
+
     @Required
-    private Long mSpeed;
+    private Float mSpeed;
+
     @Required
-    private Long mCoordinateX;
+    private Float mCoordinateX;
+
     @Required
-    private Long mCoordinateY;
+    private Float mCoordinateY;
+
+    @Required
+    private Float mRadius;
+
+    @Required
+    private Float mDegree;
 
     public Long getId() {
         return mId;
@@ -42,36 +55,52 @@ public class Airplane extends RealmObject{
         mName = aName;
     }
 
-    public Long getDirection() {
+    public Float getDirection() {
         return mDirection;
     }
 
-    public void setDirection(Long aDirection) {
+    public void setDirection(Float aDirection) {
         mDirection = aDirection;
     }
 
-    public Long getSpeed() {
+    public Float getSpeed() {
         return mSpeed;
     }
 
-    public void setSpeed(Long aSpeed) {
+    public void setSpeed(Float aSpeed) {
         mSpeed = aSpeed;
     }
 
-    public Long getCoordinateX() {
+    public Float getCoordinateX() {
         return mCoordinateX;
     }
 
-    public void setCoordinateX(Long aCoordinateX) {
+    public void setCoordinateX(Float aCoordinateX) {
         mCoordinateX = aCoordinateX;
     }
 
-    public Long getCoordinateY() {
+    public Float getCoordinateY() {
         return mCoordinateY;
     }
 
-    public void setCoordinateY(Long aCoordinateY) {
+    public void setCoordinateY(Float aCoordinateY) {
         mCoordinateY = aCoordinateY;
+    }
+
+    public Float getRadius() {
+        return mRadius;
+    }
+
+    public void setRadius(Float aRadius) {
+        mRadius = aRadius;
+    }
+
+    public Float getDegree() {
+        return mDegree;
+    }
+
+    public void setDegree(Float aDegree) {
+        mDegree = aDegree;
     }
 
     @Override

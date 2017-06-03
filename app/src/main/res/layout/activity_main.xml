@@ -5,6 +5,7 @@
     android:id="@+id/rl_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     tools:context="com.orsomob.coordinates.activitys.MainActivity">
 
 
@@ -13,18 +14,19 @@
         android:layout_width="372dp"
         android:layout_height="300dp"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:layout_gravity="center"
-        android:layout_margin="8dp"/>
+        android:layout_margin="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/fr_main_insert_remove"/>
 
     <fragment
         android:id="@+id/fr_main_insert_remove"
         android:name="com.orsomob.coordinates.fragments.InsertFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/gf_main"
-        android:layout_marginTop="19dp"
-        tools:layout="@layout/fragment_insert"/>
+        tools:layout="@layout/fragment_insert"
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/gf_main"/>
 
 </RelativeLayout>

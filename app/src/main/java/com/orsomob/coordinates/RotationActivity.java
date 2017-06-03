@@ -18,8 +18,16 @@ import android.widget.SeekBar;
  * Created by LucasOrso on 5/19/17.
  */
 
+/**
+ * Only example Activity taken from the internet,
+ * below contains the link and credits for the user who posted in stackoverflow
+ * <p>
+ * Link
+ * https://stackoverflow.com/questions/7795028/get-new-position-of-coordinate-after-rotation-with-matrix
+ * stackoverflow user
+ * https://stackoverflow.com/users/563904/entreco
+ */
 public class RotationActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener {
-
 
     private MyDrawing myDrawing;
 

@@ -2,6 +2,7 @@ package com.orsomob.coordinates.fragments;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.text.TextUtils;
@@ -15,10 +16,10 @@ import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import com.orsomob.coordinates.R;
 import com.orsomob.coordinates.module.Airplane;
+import com.orsomob.coordinates.util.Function;
 
 /**
  * Created by LucasOrso on 5/14/17.
@@ -33,19 +34,18 @@ public class InsertFragment extends Fragment {
     private TextInputEditText mEditTextCartesianX;
     private TextInputEditText mEditTextCartesianY;
     private TextInputEditText mEditTextpolarRadius;
-    private TextInputEditText mEditTextpolarAngle;
+    private TextInputEditText mEditTextpolarDegrees;
     private TextInputEditText mEditTextSpeed;
     private TextInputEditText mEditTextDirection;
-    private PassAirplaneListener mAirplaneListener;
-    private Airplane mAirplane;
+    private AirplaneListener mAirplaneListener;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mAirplaneListener = (PassAirplaneListener) context;
+            mAirplaneListener = (AirplaneListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement PassAirplaneListener");
+            throw new ClassCastException(context.toString() + " must implement AirplaneListener");
         }
     }
 
@@ -56,7 +56,6 @@ public class InsertFragment extends Fragment {
         return mView;
     }
 
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         getActivity().getMenuInflater().inflate(R.menu.add_menu, menu);
@@ -66,24 +65,23 @@ public class InsertFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_add:
-                Toast.makeText(getActivity(), "TESTE BUTTON FRAG", Toast.LENGTH_SHORT).show();
-                sendAirplane(mAirplane);
-                /*if (validateValues() == 0) {
-                    assignValues();
-                    sendAirplane(mAirplane);
-                }*/
+                Airplane lAirplane;
+                if (validateValues() == 0) {
+                    lAirplane = assignValues();
+                    sendAirplane(lAirplane);
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public interface PassAirplaneListener {
-        void getAirplane(Airplane aAirplane);
+    public interface AirplaneListener {
+        void onReceiveAirplane(Airplane aAirplane);
     }
 
     public void sendAirplane(Airplane aAirplane) {
         if (mAirplaneListener != null) {
-            mAirplaneListener.getAirplane(aAirplane);
+            mAirplaneListener.onReceiveAirplane(aAirplane);
         }
     }
 
@@ -107,7 +105,6 @@ public class InsertFragment extends Fragment {
                 }
             }
         });
-
     }
 
     public void getReferences() {
@@ -117,7 +114,7 @@ public class InsertFragment extends Fragment {
         mEditTextCartesianX = (TextInputEditText) mView.findViewById(R.id.ed_x);
         mEditTextCartesianY = (TextInputEditText) mView.findViewById(R.id.ed_y);
         mEditTextpolarRadius = (TextInputEditText) mView.findViewById(R.id.ed_radius);
-        mEditTextpolarAngle = (TextInputEditText) mView.findViewById(R.id.ed_angle);
+        mEditTextpolarDegrees = (TextInputEditText) mView.findViewById(R.id.ed_degrees);
         mEditTextSpeed = (TextInputEditText) mView.findViewById(R.id.ed_speed);
         mEditTextDirection = (TextInputEditText) mView.findViewById(R.id.ed_direction);
     }
@@ -140,10 +137,10 @@ public class InsertFragment extends Fragment {
                 mEditTextpolarRadius.setError(getActivity().getString(R.string.invalid_field));
                 return mEditTextpolarRadius.getId();
             }
-            String lAngle = mEditTextpolarAngle.getText().toString();
+            String lAngle = mEditTextpolarDegrees.getText().toString();
             if (lAngle.isEmpty() && TextUtils.isDigitsOnly(lAngle)) {
-                mEditTextpolarAngle.setError(getActivity().getString(R.string.invalid_field));
-                return mEditTextpolarAngle.getId();
+                mEditTextpolarDegrees.setError(getActivity().getString(R.string.invalid_field));
+                return mEditTextpolarDegrees.getId();
             }
         }
         String lSpeed = mEditTextSpeed.getText().toString();
@@ -159,9 +156,39 @@ public class InsertFragment extends Fragment {
         return 0;
     }
 
-    private void assignValues() {
-        mAirplane = new Airplane();
-        mAirplane.setCoordinateX(4L);
-        mAirplane.setCoordinateY(-4L);
+    private Airplane assignValues() {
+        Airplane lAirplane = new Airplane();
+        Point lPoint;
+
+        float lCoordinateX;
+        float lCoordinateY;
+        float lRadius;
+        float lDegrees;
+        float lDirection = Long.valueOf(mEditTextDirection.getText().toString());
+        float lSpeed = Float.parseFloat(mEditTextSpeed.getText().toString());
+
+
+        if (mLayoutCartesian.getVisibility() == View.VISIBLE) {
+            lCoordinateX = Float.parseFloat(mEditTextCartesianX.getText().toString());
+            lCoordinateY = Float.parseFloat(mEditTextCartesianY.getText().toString());
+            lPoint = Function.convertCartesianToPolar(lCoordinateX, lCoordinateY);
+            lDegrees = lPoint.x;
+            lRadius = lPoint.y;
+        } else {
+            lDegrees = Float.parseFloat(mEditTextpolarDegrees.getText().toString());
+            lRadius = Float.parseFloat(mEditTextpolarRadius.getText().toString());
+            lPoint = Function.convertPolarToCartesian(lRadius, lDegrees);
+            lCoordinateX = lPoint.x;
+            lCoordinateY = lPoint.y;
+        }
+
+        lAirplane.setCoordinateX(lCoordinateX);
+        lAirplane.setCoordinateY(lCoordinateY);
+        lAirplane.setDegree(lDegrees);
+        lAirplane.setRadius(lRadius);
+        lAirplane.setDirection(lDirection);
+        lAirplane.setSpeed(lSpeed);
+
+        return lAirplane;
     }
 }

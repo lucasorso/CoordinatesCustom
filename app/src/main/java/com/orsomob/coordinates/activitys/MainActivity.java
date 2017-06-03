@@ -1,13 +1,19 @@
 package com.orsomob.coordinates.activitys;
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -17,13 +23,16 @@ import com.orsomob.coordinates.RotationActivity;
 import com.orsomob.coordinates.fragments.InsertFragment;
 import com.orsomob.coordinates.module.Airplane;
 
-public class MainActivity extends AppCompatActivity implements InsertFragment.PassAirplaneListener {
+import io.realm.Realm;
+
+public class MainActivity extends AppCompatActivity implements InsertFragment.AirplaneListener {
 
     public static final int HISTORY = 20;
     private static final String TAG = "MainActivity";
 
     private RelativeLayout mRelativeLayout;
     private GraphView mGraphView;
+    private Realm mRealm;
 
 
     @Override
@@ -44,8 +53,6 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Pa
 
 //        Log.i(TAG, "interpX GraphView : " + mGraphView.interpX(xp));
 //        Log.i(TAG, "interpY GraphView : " + mGraphView.interpY(yp));
-//        lImageView.setX(722.4f);
-//        lImageView.setY(585.0f);
 
 //        lImageView.setX(interpX(xp) -(getBitmap().getWidth() / 2));
 //        lImageView.setY(interpY(yp) -(getBitmap().getHeight() / 2));
@@ -62,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Pa
 //                mRelativeLayout.addView(lImageView);
 //            }
 //        });
-
+//
 //        lImageView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -72,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Pa
     }
 
     private void init() {
+        mRealm = Realm.getDefaultInstance();
         getReferences();
     }
 
@@ -124,12 +132,39 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Pa
     }
 
     @Override
-    public void getAirplane(Airplane aAirplane) {
-        Toast.makeText(this, "REcebi", Toast.LENGTH_SHORT).show();
+    protected void onDestroy() {
+        super.onDestroy();
+        mRealm.close();
+    }
+
+    @Override
+    public void onReceiveAirplane(Airplane aAirplane) {
+        final ImageView lImageView = new ImageView(this);
+
+        lImageView.setImageBitmap(getBitmap());
+        lImageView.setX(mGraphView.interpX(4f));
+        lImageView.setY(mGraphView.interpY(-3f));
+        mGraphView.post(new Runnable() {
+            @Override
+            public void run() {
+                lImageView.setRotation(90f);
+                mRelativeLayout.addView(lImageView);
+            }
+        });
+
+        Snackbar lSnackbar = Snackbar
+                .make(this.getCurrentFocus(), "Airplane added !", Snackbar.LENGTH_SHORT)
+                .setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                    }
+                });
+        lSnackbar.show();
+
     }
 
 
-   /*private Bitmap getBitmap() {
+    private Bitmap getBitmap() {
         return decodeSampledBitmapFromResource(this.getResources(), R.drawable.airplane_top, 15, 15);
     }
 
@@ -168,25 +203,5 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Pa
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeResource(res, resId, options);
-    }*/
-
-
-    /**
-     * funções de testes
-     */
-    /*private float interpX(double x) {
-        double width = (double) display.getWidth();
-        Log.i(TAG, "width : " + width);
-        float result = (float) ((x + mGraphView.getGridDimension()) / (mGraphView.getGridDimension() * 2) * width);
-        Log.i(TAG, "interpX : " + result);
-        return result;
     }
-
-    private float interpY(double y) {
-        double height = (double) display.getHeight();
-        Log.i(TAG, "height : " + height);
-        float result = (float) ((y + mGraphView.getGridDimension()) / (mGraphView.getGridDimension() * 2) * -height + height);
-        Log.i(TAG, "interpY : " + result);
-        return result;
-    }*/
 }
