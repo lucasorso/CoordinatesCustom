@@ -1,5 +1,7 @@
 package com.orsomob.coordinates.module;
 
+import java.io.Serializable;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.RealmClass;
@@ -10,7 +12,7 @@ import io.realm.annotations.Required;
  */
 
 @RealmClass
-public class Airplane extends RealmObject{
+public class Airplane extends RealmObject implements Serializable{
 
     public static String sAirplane = "Airplane";
 

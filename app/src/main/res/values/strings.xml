@@ -12,5 +12,10 @@
     <string name="max_value_10">Please enter a value between -10 and 10 !</string>
     <string name="the_polar_coordinate_is_not_valid">The polar coordinate inserted is not valid !\nCoordinate X = %1$d\nCoorinate Y = %2$d</string>
     <string name="airplane">Airplane</string>
+    <string name="angle">Angle</string>
+    <string name="speed">Speed</string>
+    <string name="direction">Direction</string>
+    <string name="name">Name</string>
+    <string name="edit">Edit</string>
 
 </resources>

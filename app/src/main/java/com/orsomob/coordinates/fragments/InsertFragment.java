@@ -17,7 +17,6 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 
-import com.orsomob.coordinates.AirplaneListener;
 import com.orsomob.coordinates.R;
 import com.orsomob.coordinates.module.Airplane;
 import com.orsomob.coordinates.util.Function;
@@ -81,6 +80,10 @@ public class InsertFragment extends Fragment {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public interface AirplaneListener {
+        void onReceiveAirplane(Airplane aAirplane);
     }
 
     public void sendAirplane(Airplane aAirplane) {
@@ -228,7 +231,6 @@ public class InsertFragment extends Fragment {
         AlertDialog lAlertDialog = lBuilder.create();
         lAlertDialog.show();
     }
-
 
     private Airplane assignValues() {
         Airplane lAirplane = new Airplane();

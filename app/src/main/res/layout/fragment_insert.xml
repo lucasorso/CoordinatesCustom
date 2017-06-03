@@ -19,7 +19,7 @@
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
             android:gravity="center"
-            android:text="@string/type_coordinate"/>
+            android:hint="@string/type_coordinate"/>
 
         <LinearLayout
             android:id="@+id/ll_cartesian"
@@ -42,7 +42,8 @@
                     android:id="@+id/ed_x"
                     android:layout_width="140dp"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal|numberSigned"/>
+                    android:inputType="numberDecimal|numberSigned"
+                    android:imeOptions="actionNext"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -60,7 +61,8 @@
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/btn_insert"
                     android:layout_alignStart="@+id/btn_insert"
-                    android:inputType="numberDecimal|numberSigned"/>
+                    android:inputType="numberDecimal|numberSigned"
+                    android:imeOptions="actionNext"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -88,7 +90,8 @@
                     android:id="@+id/ed_radius"
                     android:layout_width="140dp"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal|numberSigned"/>
+                    android:inputType="numberDecimal|numberSigned"
+                    android:imeOptions="actionNext"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -98,7 +101,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="1dp"
                 android:layout_weight="1"
-                android:hint="Angle">
+                android:hint="@string/angle">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/ed_degrees"
@@ -106,7 +109,8 @@
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/btn_insert"
                     android:layout_alignStart="@+id/btn_insert"
-                    android:inputType="numberDecimal|numberSigned"/>
+                    android:inputType="numberDecimal|numberSigned"
+                    android:imeOptions="actionNext"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -126,13 +130,14 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="1dp"
                 android:layout_weight="1"
-                android:hint="Speed">
+                android:hint="@string/speed">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/ed_speed"
                     android:layout_width="140dp"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"/>
+                    android:inputType="numberDecimal"
+                    android:imeOptions="actionNext"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -142,7 +147,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="1dp"
                 android:layout_weight="1"
-                android:hint="Direction">
+                android:hint="@string/direction">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/ed_direction"
@@ -150,7 +155,8 @@
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/btn_insert"
                     android:layout_alignStart="@+id/btn_insert"
-                    android:inputType="numberDecimal"/>
+                    android:inputType="numberDecimal"
+                    android:imeOptions="actionDone"/>
 
             </android.support.design.widget.TextInputLayout>
 

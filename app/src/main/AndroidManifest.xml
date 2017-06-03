@@ -10,18 +10,23 @@
         android:roundIcon="@mipmap/airplane_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SplashScreen"
+        <activity
+            android:name=".SplashScreen"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activitys.MainActivity"
-                  android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity
+            android:name=".activitys.MainActivity"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
         <activity android:name=".activitys.RotationActivity"/>
         <activity android:name=".activitys.HistoryActivity"/>
+        <activity
+            android:name=".activitys.EditAirplane"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog"
+            android:windowSoftInputMode="adjustPan"/>
     </application>
 
 </manifest>

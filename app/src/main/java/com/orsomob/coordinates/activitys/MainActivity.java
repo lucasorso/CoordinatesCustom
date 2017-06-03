@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,19 +19,21 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.orsomob.coordinates.AirplaneListener;
 import com.orsomob.coordinates.GraphView;
 import com.orsomob.coordinates.R;
+import com.orsomob.coordinates.fragments.InsertFragment;
 import com.orsomob.coordinates.module.Airplane;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
 
-public class MainActivity extends AppCompatActivity implements AirplaneListener, View.OnTouchListener{
+public class MainActivity extends AppCompatActivity implements InsertFragment.AirplaneListener, View.OnTouchListener {
 
-    public static final int HISTORY = 20;
+    private static final int EDIT = 10;
+    private static final int HISTORY = 20;
     private static final String TAG = "MAIN_ACTIVITY";
 
     private RelativeLayout mRelativeLayout;
@@ -38,29 +41,17 @@ public class MainActivity extends AppCompatActivity implements AirplaneListener,
     private Realm mRealm;
     private List<Airplane> mAirplaneList;
     private List<ImageView> mViewList;
+    private View.OnClickListener mSnackOnlick;
 
+    /**
+     * Override methods
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
-    }
-
-    private void init() {
-        mAirplaneList = new ArrayList<>();
-        mViewList = new ArrayList<>();
-        mRealm = Realm.getDefaultInstance();
-        getReferences();
-    }
-
-    private void getReferences() {
-        mRelativeLayout = (RelativeLayout) findViewById(R.id.rl_main);
-        mGraphView = (GraphView) findViewById(R.id.gf_main);
-    }
-
-    public RelativeLayout getRootLayout() {
-        return mRelativeLayout;
     }
 
     @Override
@@ -121,33 +112,92 @@ public class MainActivity extends AppCompatActivity implements AirplaneListener,
         });
 
         mViewList.add(lImageView);
-        aAirplane.setName(aAirplane.getName()+ mAirplaneList.size() +1);
+        aAirplane.setName(aAirplane.getName() + mAirplaneList.size() + 1);
         mAirplaneList.add(aAirplane);
 
         Snackbar lSnackbar = Snackbar
                 .make(this.getRootLayout().findFocus(), "Airplane added !", Snackbar.LENGTH_LONG)
-                .setAction("UNDO", snackOnlick)
+                .setAction("UNDO", mSnackOnlick)
                 .setActionTextColor(getResources().getColor(android.R.color.holo_red_light));
         lSnackbar.show();
 
     }
 
     @Override
-    public void onUpdateAirplane(Airplane aAirplane) {
-        /*Nothing*/
+    public boolean onTouch(View v, MotionEvent event) {
+
+        try {
+            Airplane lAirplane = (Airplane) v.getTag();
+            openEdit(lAirplane);
+        } catch (ClassCastException aE) {
+            Log.e(TAG, "onTouch: Couldn`t catch aiplane");
+            aE.printStackTrace();
+        }
+        return false;
     }
 
     /**
-     * Remove last item added
+     * Non override methods
      */
-    View.OnClickListener snackOnlick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            /*Nothing*/
-        }
-    };
 
-    private Bitmap getBitmap() {
+    private void init() {
+        mAirplaneList = new ArrayList<>();
+        mViewList = new ArrayList<>();
+        mRealm = Realm.getDefaultInstance();
+        getReferences();
+        setEvents();
+
+        funTest(); // TODO: 6/3/17 REMOVER
+    }
+
+    private void funTest() {
+        final ImageView lImageView = new ImageView(this);
+        Airplane lAirplane = new Airplane();
+
+        lAirplane.setCoordinateX(5.0f);
+        lAirplane.setCoordinateY(-5.0f);
+        lAirplane.setDegree(7.0f);
+        lAirplane.setDirection(45.0f);
+        lAirplane.setRadius(0.0f);
+        lAirplane.setSpeed(1000.0f);
+        lAirplane.setName("Airplane Teste");
+
+        lImageView.setImageBitmap(getBitmap());
+        lImageView.setX(mGraphView.interpX(lAirplane.getCoordinateX()));
+        lImageView.setY(mGraphView.interpY(lAirplane.getCoordinateY()));
+        lImageView.setRotation(lAirplane.getDirection());
+        lImageView.setTag(lAirplane);
+        lImageView.setOnTouchListener(this);
+
+        mGraphView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mRelativeLayout.addView(lImageView);
+            }
+        }, 2300);
+
+        mViewList.add(lImageView);
+    }
+
+    private void getReferences() {
+        mRelativeLayout = (RelativeLayout) findViewById(R.id.rl_main);
+        mGraphView = (GraphView) findViewById(R.id.gf_main);
+    }
+
+    private void setEvents() {
+        mSnackOnlick = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            /*Nothing*/
+            }
+        };
+    }
+
+    public RelativeLayout getRootLayout() {
+        return mRelativeLayout;
+    }
+
+    public Bitmap getBitmap() {
         return decodeSampledBitmapFromResource(this.getResources(), R.drawable.airplane_top, 15, 15);
     }
 
@@ -188,16 +238,11 @@ public class MainActivity extends AppCompatActivity implements AirplaneListener,
         return BitmapFactory.decodeResource(res, resId, options);
     }
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-
-        try {
-            Airplane lAirplane = (Airplane) v.getTag();
-            Snackbar lSnackbar = Snackbar.make(this.getRootLayout().findFocus(), lAirplane.getName(), Snackbar.LENGTH_LONG);
-            lSnackbar.show();
-        } catch (ClassCastException aE) {
-            aE.printStackTrace();
-        }
-        return false;
+    private void openEdit(Airplane aAirplane) {
+        Intent lIntent = new Intent(this, EditAirplane.class);
+        Bundle lBundle = new Bundle();
+        lBundle.putSerializable("airplane", (Serializable) aAirplane);
+        lIntent.putExtras(lBundle);
+        startActivityForResult(lIntent, EDIT);
     }
 }
