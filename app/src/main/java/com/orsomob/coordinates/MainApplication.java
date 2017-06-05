@@ -1,19 +1,25 @@
 package com.orsomob.coordinates;
 
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
+import android.app.Application;
+
+import com.raizlabs.android.dbflow.config.FlowConfig;
+import com.raizlabs.android.dbflow.config.FlowManager;
 
 /**
  * Created by LucasOrso on 6/2/17.
  */
 
-public class MainApplication extends android.app.Application {
+public class MainApplication extends Application {
 
     @Override
     public void onCreate() {
         super.onCreate();
-        Realm.init(this);
-        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().name("realm").build();
-        Realm.setDefaultConfiguration(realmConfiguration);
+        FlowManager.init(new FlowConfig.Builder(this).build());
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        FlowManager.destroy();
     }
 }

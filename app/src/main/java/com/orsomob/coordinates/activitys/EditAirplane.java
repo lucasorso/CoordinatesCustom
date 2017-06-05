@@ -58,6 +58,7 @@ public class EditAirplane extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.btn_edit:
                 Airplane lAirplane = null;
+
                 // TODO: 6/3/17 Fazer
                 setResult(RESULT_OK);
                 break;
@@ -123,8 +124,8 @@ public class EditAirplane extends AppCompatActivity implements View.OnClickListe
         mEditTextName.setEnabled(true);
         mEditTextCartesianX.setEnabled(true);
         mEditTextCartesianY.setEnabled(true);
-        mEditTextPolarRadius.setEnabled(true);
-        mEditTextPolarDegrees.setEnabled(true);
+//        mEditTextPolarRadius.setEnabled(true);
+//        mEditTextPolarDegrees.setEnabled(true);
         mEditTextSpeed.setEnabled(true);
         mEditTextDirection.setEnabled(true);
         mEditButton.setEnabled(true);

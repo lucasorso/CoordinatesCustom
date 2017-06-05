@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -21,14 +22,13 @@ import android.widget.Toast;
 
 import com.orsomob.coordinates.GraphView;
 import com.orsomob.coordinates.R;
+import com.orsomob.coordinates.data.module.AirplaneData;
 import com.orsomob.coordinates.fragments.InsertFragment;
 import com.orsomob.coordinates.module.Airplane;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.Realm;
 
 public class MainActivity extends AppCompatActivity implements InsertFragment.AirplaneListener, View.OnTouchListener {
 
@@ -38,10 +38,7 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
 
     private RelativeLayout mRelativeLayout;
     private GraphView mGraphView;
-    private Realm mRealm;
     private List<Airplane> mAirplaneList;
-    private List<ImageView> mViewList;
-    private View.OnClickListener mSnackOnlick;
 
     /**
      * Override methods
@@ -91,11 +88,13 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mRealm.close();
     }
 
     @Override
-    public void onReceiveAirplane(Airplane aAirplane) {
+    public void onReceiveAirplane(final Airplane aAirplane) {
+
+        aAirplane.setName(aAirplane.getName() + mAirplaneList.size() + 1);
+
         final ImageView lImageView = new ImageView(this);
 
         lImageView.setImageBitmap(getBitmap());
@@ -104,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
         lImageView.setRotation(aAirplane.getDirection());
         lImageView.setTag(aAirplane);
         lImageView.setOnTouchListener(this);
+
         mGraphView.post(new Runnable() {
             @Override
             public void run() {
@@ -111,21 +111,15 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
             }
         });
 
-        mViewList.add(lImageView);
-        aAirplane.setName(aAirplane.getName() + mAirplaneList.size() + 1);
         mAirplaneList.add(aAirplane);
 
-        Snackbar lSnackbar = Snackbar
-                .make(this.getRootLayout().findFocus(), "Airplane added !", Snackbar.LENGTH_LONG)
-                .setAction("UNDO", mSnackOnlick)
-                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light));
-        lSnackbar.show();
+        Airplane.transformToData(aAirplane);
+        showMessaUndo();
 
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-
         try {
             Airplane lAirplane = (Airplane) v.getTag();
             openEdit(lAirplane);
@@ -142,12 +136,44 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
 
     private void init() {
         mAirplaneList = new ArrayList<>();
-        mViewList = new ArrayList<>();
-        mRealm = Realm.getDefaultInstance();
         getReferences();
         setEvents();
+        getFromDataBase();
+//        funTest(); // TODO: 6/3/17 REMOVER
+    }
 
-        funTest(); // TODO: 6/3/17 REMOVER
+    private void getFromDataBase() {
+
+        final List<AirplaneData> lAirplaneDatas = SQLite.select().from(AirplaneData.class).queryList();
+
+        Handler lHandler = new Handler();
+
+        lHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!lAirplaneDatas.isEmpty()) {
+
+                    for (AirplaneData aAirplaneData : lAirplaneDatas) {
+                        final ImageView lImageView = new ImageView(MainActivity.this);
+                        Airplane lAirplane = Airplane.transformToAirplane(aAirplaneData);
+
+                        lImageView.setImageBitmap(getBitmap());
+                        lImageView.setX(mGraphView.interpX(lAirplane.getCoordinateX()));
+                        lImageView.setY(mGraphView.interpY(lAirplane.getCoordinateY()));
+                        lImageView.setRotation(lAirplane.getDirection());
+                        lImageView.setTag(lAirplane);
+                        lImageView.setOnTouchListener(MainActivity.this);
+
+                        mGraphView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mRelativeLayout.addView(lImageView);
+                            }
+                        });
+                    }
+                }
+            }
+        }, 1000);
     }
 
     private void funTest() {
@@ -169,14 +195,22 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
         lImageView.setTag(lAirplane);
         lImageView.setOnTouchListener(this);
 
-        mGraphView.postDelayed(new Runnable() {
+        Handler mHandler = new Handler();
+        mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mRelativeLayout.addView(lImageView);
+                try {
+                    mGraphView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mRelativeLayout.addView(lImageView);
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-        }, 2300);
-
-        mViewList.add(lImageView);
+        }, 30000);
     }
 
     private void getReferences() {
@@ -185,12 +219,7 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
     }
 
     private void setEvents() {
-        mSnackOnlick = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            /*Nothing*/
-            }
-        };
+       /*Nothing*/
     }
 
     public RelativeLayout getRootLayout() {
@@ -241,8 +270,22 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
     private void openEdit(Airplane aAirplane) {
         Intent lIntent = new Intent(this, EditAirplane.class);
         Bundle lBundle = new Bundle();
-        lBundle.putSerializable("airplane", (Serializable) aAirplane);
+        lBundle.putSerializable("airplane", aAirplane);
         lIntent.putExtras(lBundle);
         startActivityForResult(lIntent, EDIT);
     }
+
+    private void showMessaUndo() {
+        Snackbar lSnackbar = Snackbar
+                .make(this.getRootLayout().findFocus(), "Airplane added !", Snackbar.LENGTH_LONG)
+                .setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                })
+                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light));
+        lSnackbar.show();
+    }
+
 }

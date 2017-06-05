@@ -17,5 +17,6 @@
     <string name="direction">Direction</string>
     <string name="name">Name</string>
     <string name="edit">Edit</string>
+    <string name="preference_file_key">coordinates</string>
 
 </resources>

@@ -1,49 +1,39 @@
 package com.orsomob.coordinates.module;
 
-import java.io.Serializable;
+import com.orsomob.coordinates.data.module.AirplaneData;
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
-import io.realm.annotations.RealmClass;
-import io.realm.annotations.Required;
+import java.io.Serializable;
 
 /**
  * Created by LucasOrso on 5/28/17.
  */
 
-@RealmClass
-public class Airplane extends RealmObject implements Serializable{
+
+public class Airplane implements Serializable {
 
     public static String sAirplane = "Airplane";
 
-    @PrimaryKey
-    private Long mId;
+    private Integer mId;
 
-    private String mName = "Airplane ";
+    private String mName = sAirplane;
 
-    @Required
     private Float mDirection;
 
-    @Required
     private Float mSpeed;
 
-    @Required
     private Float mCoordinateX;
 
-    @Required
     private Float mCoordinateY;
 
-    @Required
     private Float mRadius;
 
-    @Required
     private Float mDegree;
 
-    public Long getId() {
+    public Integer getId() {
         return mId;
     }
 
-    public void setId(Long aId) {
+    public void setId(Integer aId) {
         mId = aId;
     }
 
@@ -101,6 +91,35 @@ public class Airplane extends RealmObject implements Serializable{
 
     public void setDegree(Float aDegree) {
         mDegree = aDegree;
+    }
+
+    public static void transformToData(Airplane aAirplane) {
+        AirplaneData lAirplaneData = new AirplaneData();
+
+        lAirplaneData.setName(aAirplane.getName());
+        lAirplaneData.setCoordinateX(aAirplane.getCoordinateX().doubleValue());
+        lAirplaneData.setCoordinateY(aAirplane.getCoordinateY().doubleValue());
+        lAirplaneData.setSpeed(aAirplane.getSpeed().doubleValue());
+        lAirplaneData.setDirection(aAirplane.getDirection().doubleValue());
+        lAirplaneData.setDegree(aAirplane.getDegree().doubleValue());
+        lAirplaneData.setRadius(aAirplane.getRadius().doubleValue());
+
+        lAirplaneData.save();
+    }
+
+    public static Airplane transformToAirplane(AirplaneData aAirplaneData) {
+        Airplane lAirplane = new Airplane();
+
+        lAirplane.setId(aAirplaneData.getId());
+        lAirplane.setName(aAirplaneData.getName());
+        lAirplane.setCoordinateX(aAirplaneData.getCoordinateX().floatValue());
+        lAirplane.setCoordinateY(aAirplaneData.getCoordinateY().floatValue());
+        lAirplane.setSpeed(aAirplaneData.getSpeed().floatValue());
+        lAirplane.setDirection(aAirplaneData.getDirection().floatValue());
+        lAirplane.setDegree(aAirplaneData.getDegree().floatValue());
+        lAirplane.setRadius(aAirplaneData.getRadius().floatValue());
+
+        return lAirplane;
     }
 
     @Override
