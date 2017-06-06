@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
     @Override
     public void onReceiveAirplane(final Airplane aAirplane) {
 
-        aAirplane.setName(aAirplane.getName() + mAirplaneList.size() + 1);
+        aAirplane.setName(aAirplane.getName() + mAirplaneList.size());
 
         final ImageView lImageView = new ImageView(this);
 

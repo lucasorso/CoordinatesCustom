@@ -32,6 +32,7 @@ public class EditAirplane extends AppCompatActivity implements View.OnClickListe
     private TextInputEditText mEditTextDirection;
     private ImageView mImageViewAirplane;
     private Button mEditButton;
+    private Button mRemoveButton;
     private Airplane mAirplane;
 
     /**
@@ -62,12 +63,16 @@ public class EditAirplane extends AppCompatActivity implements View.OnClickListe
                 // TODO: 6/3/17 Fazer
                 setResult(RESULT_OK);
                 break;
+            case R.id.btn_remove:
+
+                // TODO: 6/5/17 Remover
+                setResult(RESULT_CANCELED);
+                break;
         }
     }
 
     @Override
     public void onBackPressed() {
-        setResult(RESULT_CANCELED);
         super.onBackPressed();
     }
 
@@ -100,6 +105,7 @@ public class EditAirplane extends AppCompatActivity implements View.OnClickListe
         mEditTextSpeed = (TextInputEditText) findViewById(R.id.ed_speed);
         mEditTextDirection = (TextInputEditText) findViewById(R.id.ed_direction);
         mEditButton = (Button) findViewById(R.id.btn_edit);
+        mRemoveButton =(Button) findViewById(R.id.btn_remove);
     }
 
     private void setEvents() {
@@ -118,6 +124,7 @@ public class EditAirplane extends AppCompatActivity implements View.OnClickListe
             }
         });
         mEditButton.setOnClickListener(this);
+        mRemoveButton.setOnClickListener(this);
     }
 
     private void enableEdit() {
