@@ -1,5 +1,6 @@
 package com.orsomob.coordinates.activitys;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
@@ -57,17 +58,29 @@ public class EditAirplane extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_edit:
-                Airplane lAirplane = null;
-
+            case R.id.btn_edit: {
                 // TODO: 6/3/17 Fazer
                 setResult(RESULT_OK);
-                break;
-            case R.id.btn_remove:
-
+                Intent lIntent = new Intent();
+                Bundle lBundle = new Bundle();
+                lBundle.putSerializable("airplane", mAirplane);
+                lBundle.putBoolean("edit", true);
+                lIntent.putExtras(lBundle);
+                setResult(RESULT_OK, lIntent);
+                finish();
+            }
+            break;
+            case R.id.btn_remove: {
                 // TODO: 6/5/17 Remover
-                setResult(RESULT_CANCELED);
-                break;
+                Intent lIntent = new Intent();
+                Bundle lBundle = new Bundle();
+                lBundle.putSerializable("airplane", mAirplane);
+                lBundle.putBoolean("remove", true);
+                lIntent.putExtras(lBundle);
+                setResult(RESULT_OK, lIntent);
+                finish();
+            }
+            break;
         }
     }
 
@@ -105,7 +118,7 @@ public class EditAirplane extends AppCompatActivity implements View.OnClickListe
         mEditTextSpeed = (TextInputEditText) findViewById(R.id.ed_speed);
         mEditTextDirection = (TextInputEditText) findViewById(R.id.ed_direction);
         mEditButton = (Button) findViewById(R.id.btn_edit);
-        mRemoveButton =(Button) findViewById(R.id.btn_remove);
+        mRemoveButton = (Button) findViewById(R.id.btn_remove);
     }
 
     private void setEvents() {
@@ -136,6 +149,7 @@ public class EditAirplane extends AppCompatActivity implements View.OnClickListe
         mEditTextSpeed.setEnabled(true);
         mEditTextDirection.setEnabled(true);
         mEditButton.setEnabled(true);
+        mEditButton.setVisibility(View.VISIBLE);
     }
 
     private void disableEdit() {
@@ -147,6 +161,7 @@ public class EditAirplane extends AppCompatActivity implements View.OnClickListe
         mEditTextSpeed.setEnabled(false);
         mEditTextDirection.setEnabled(false);
         mEditButton.setEnabled(false);
+        mEditButton.setVisibility(View.INVISIBLE);
     }
 
     private void setValues() {

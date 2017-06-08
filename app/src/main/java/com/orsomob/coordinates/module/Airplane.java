@@ -93,7 +93,7 @@ public class Airplane implements Serializable {
         mDegree = aDegree;
     }
 
-    public static void transformToData(Airplane aAirplane) {
+    public static AirplaneData saveToDatabase(Airplane aAirplane) {
         AirplaneData lAirplaneData = new AirplaneData();
 
         lAirplaneData.setName(aAirplane.getName());
@@ -105,9 +105,11 @@ public class Airplane implements Serializable {
         lAirplaneData.setRadius(aAirplane.getRadius().doubleValue());
 
         lAirplaneData.save();
+
+        return lAirplaneData;
     }
 
-    public static Airplane transformToAirplane(AirplaneData aAirplaneData) {
+    public static Airplane loadFromDatabase(AirplaneData aAirplaneData) {
         Airplane lAirplane = new Airplane();
 
         lAirplane.setId(aAirplaneData.getId());

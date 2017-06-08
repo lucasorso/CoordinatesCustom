@@ -23,12 +23,14 @@ import android.widget.Toast;
 import com.orsomob.coordinates.GraphView;
 import com.orsomob.coordinates.R;
 import com.orsomob.coordinates.data.module.AirplaneData;
+import com.orsomob.coordinates.data.module.AirplaneData_Table;
 import com.orsomob.coordinates.fragments.InsertFragment;
 import com.orsomob.coordinates.module.Airplane;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements InsertFragment.AirplaneListener, View.OnTouchListener {
 
@@ -82,7 +84,29 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+//        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case EDIT: {
+                if (RESULT_OK == resultCode) {
+                    Bundle lBundle = data.getExtras();
+                    if (lBundle != null) {
+                        boolean lEdit = lBundle.containsKey("edit") && lBundle.getBoolean("edit");
+                        boolean lRemove = lBundle.containsKey("remove") && lBundle.getBoolean("remove");
+                        Airplane lAirplane = lBundle.containsKey("airplane") ? (Airplane) lBundle.get("airplane") : null;
+                        if (lEdit) {
+                            editAirplane(lAirplane);
+                        }
+                        if (lRemove) {
+                            removeAirplane(lAirplane);
+                        }
+                    }
+                }
+            }
+            break;
+            case HISTORY:
+                // TODO: 6/7/17 FAZER
+                break;
+        }
     }
 
     @Override
@@ -94,6 +118,8 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
     public void onReceiveAirplane(final Airplane aAirplane) {
 
         aAirplane.setName(aAirplane.getName() + mAirplaneList.size());
+        int id = Airplane.saveToDatabase(aAirplane).getId();
+        aAirplane.setId(id);
 
         final ImageView lImageView = new ImageView(this);
 
@@ -113,9 +139,7 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
 
         mAirplaneList.add(aAirplane);
 
-        Airplane.transformToData(aAirplane);
-        showMessaUndo();
-
+        showMessaUndo(aAirplane);
     }
 
     @Override
@@ -155,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
 
                     for (AirplaneData aAirplaneData : lAirplaneDatas) {
                         final ImageView lImageView = new ImageView(MainActivity.this);
-                        Airplane lAirplane = Airplane.transformToAirplane(aAirplaneData);
+                        Airplane lAirplane = Airplane.loadFromDatabase(aAirplaneData);
 
                         lImageView.setImageBitmap(getBitmap());
                         lImageView.setX(mGraphView.interpX(lAirplane.getCoordinateX()));
@@ -275,17 +299,35 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
         startActivityForResult(lIntent, EDIT);
     }
 
-    private void showMessaUndo() {
+    private void showMessaUndo(final Airplane aAirplane) {
         Snackbar lSnackbar = Snackbar
                 .make(this.getRootLayout().findFocus(), "Airplane added !", Snackbar.LENGTH_LONG)
                 .setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        removeAirplane(aAirplane);
                     }
                 })
                 .setActionTextColor(getResources().getColor(android.R.color.holo_red_light));
         lSnackbar.show();
     }
 
+    private void editAirplane(Airplane aAirplane) {
+
+    }
+
+    private void removeAirplane(Airplane aAirplane) {
+        Airplane lAirplane;
+        final int childCount = mRelativeLayout.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View lChildAt = mRelativeLayout.getChildAt(i);
+            if (lChildAt instanceof ImageView) {
+                lAirplane = (Airplane) lChildAt.getTag();
+                if (Objects.equals(lAirplane.getId(), aAirplane.getId())) {
+                    mRelativeLayout.removeView(lChildAt); // Remove from screen
+                    SQLite.delete().from(AirplaneData.class).where(AirplaneData_Table.id.is(aAirplane.getId())).execute(); // Remove from dataBase
+                }
+            }
+        }
+    }
 }
