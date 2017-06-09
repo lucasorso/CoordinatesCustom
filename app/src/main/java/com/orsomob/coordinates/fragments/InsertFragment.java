@@ -221,6 +221,8 @@ public class InsertFragment extends Fragment {
         } catch (NumberFormatException aE) {
             Log.e(TAG, "convertStringToInteger: " + aE.getMessage());
             aE.printStackTrace();
+            Double lDouble = Double.valueOf(aStrinNumber);
+            lInteger = lDouble.intValue();
         }
         return lInteger;
     }

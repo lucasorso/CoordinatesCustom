@@ -18,7 +18,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.orsomob.coordinates.GraphView;
 import com.orsomob.coordinates.R;
@@ -74,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_historico:
-                Toast.makeText(this, "History", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, HistoryActivity.class));
                 break;
             case R.id.menu_rotation:
                 startActivity(new Intent(this, RotationActivity.class));
@@ -242,9 +241,7 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
         mGraphView = (GraphView) findViewById(R.id.gf_main);
     }
 
-    private void setEvents() {
-       /*Nothing*/
-    }
+    private void setEvents() {/*Nothing*/}
 
     public RelativeLayout getRootLayout() {
         return mRelativeLayout;
@@ -313,7 +310,7 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
     }
 
     private void editAirplane(Airplane aAirplane) {
-
+        // TODO: 6/8/17 Fazer editar avião
     }
 
     private void removeAirplane(Airplane aAirplane) {
