@@ -59,7 +59,6 @@ public class EditAirplane extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_edit: {
-                // TODO: 6/3/17 Fazer
                 setResult(RESULT_OK);
                 Intent lIntent = new Intent();
                 Bundle lBundle = new Bundle();
@@ -71,7 +70,6 @@ public class EditAirplane extends AppCompatActivity implements View.OnClickListe
             }
             break;
             case R.id.btn_remove: {
-                // TODO: 6/5/17 Remover
                 Intent lIntent = new Intent();
                 Bundle lBundle = new Bundle();
                 lBundle.putSerializable("airplane", mAirplane);
