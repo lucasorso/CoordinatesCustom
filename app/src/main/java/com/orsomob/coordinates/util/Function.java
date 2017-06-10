@@ -1,6 +1,13 @@
 package com.orsomob.coordinates.util;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.graphics.Point;
+import android.util.Log;
+
+import com.orsomob.coordinates.R;
+
+import static com.orsomob.coordinates.fragments.TranslationFragment.TAG;
 
 /**
  * Created by LucasOrso on 6/2/17.
@@ -34,4 +41,31 @@ public class Function {
         return lPoint;
     }
 
+    /**
+     * @param aStrinNumber
+     * @return Integer
+     */
+    public static Integer convertStringToInteger(String aStrinNumber) {
+        Integer lInteger = null;
+        try {
+            lInteger = Integer.parseInt(aStrinNumber);
+        } catch (NumberFormatException aE) {
+            Log.e(TAG, "convertStringToInteger: " + aE.getMessage());
+            aE.printStackTrace();
+            Double lDouble = Double.valueOf(aStrinNumber);
+            lInteger = lDouble.intValue();
+        }
+        return lInteger;
+    }
+
+    /**
+     * @param aContext
+     * @param aMessage
+     */
+    public static void showDialoAlert(Context aContext, String aMessage) {
+        AlertDialog.Builder lBuilder = new AlertDialog.Builder(aContext);
+        lBuilder.setTitle(R.string.alert).setMessage(aMessage);
+        AlertDialog lAlertDialog = lBuilder.create();
+        lAlertDialog.show();
+    }
 }

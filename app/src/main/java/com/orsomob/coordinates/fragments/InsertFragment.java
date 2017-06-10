@@ -1,11 +1,10 @@
 package com.orsomob.coordinates.fragments;
 
-import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,6 +21,8 @@ import com.orsomob.coordinates.module.Airplane;
 import com.orsomob.coordinates.util.Function;
 
 import static com.orsomob.coordinates.util.Function.convertPolarToCartesian;
+import static com.orsomob.coordinates.util.Function.convertStringToInteger;
+import static com.orsomob.coordinates.util.Function.showDialoAlert;
 
 /**
  * Created by LucasOrso on 5/14/17.
@@ -143,7 +144,7 @@ public class InsertFragment extends Fragment {
                 } else {
                 if (lCartesianXint > 10 || lCartesianXint < -10) {
                     mEditTextCartesianX.setError(getActivity().getString(R.string.invalid_field));
-                    showDialoAlert(getActivity().getResources().getString(R.string.max_value_10));
+                    showDialoAlert(getActivity(), getActivity().getResources().getString(R.string.max_value_10));
                     return mEditTextCartesianX.getId();
                 }
             }
@@ -155,7 +156,7 @@ public class InsertFragment extends Fragment {
             } else {
                 if (lCartesianYint > 10 || lCartesianYint < -10) {
                     mEditTextCartesianY.setError(getActivity().getString(R.string.invalid_field));
-                    showDialoAlert(getActivity().getResources().getString(R.string.max_value_10));
+                    showDialoAlert(getActivity(), getActivity().getResources().getString(R.string.max_value_10));
                     return mEditTextCartesianX.getId();
                 }
             }
@@ -183,7 +184,7 @@ public class InsertFragment extends Fragment {
                     (lPoint.y > 10 || lPoint.y < -10)) {
                 mEditTextPolarDegrees.setError(getActivity().getString(R.string.invalid_field));
                 mEditTextPolarRadius.setError(getActivity().getString(R.string.invalid_field));
-                showDialoAlert(String.format(getActivity().getResources().getString(R.string.the_polar_coordinate_is_not_valid), lPoint.x, lPoint.y));
+                showDialoAlert(getActivity(), String.format(getActivity().getResources().getString(R.string.the_polar_coordinate_is_not_valid), lPoint.x, lPoint.y));
                 return -1;
             }
         }
@@ -195,7 +196,7 @@ public class InsertFragment extends Fragment {
         } else {
             if (lSpeedInt <= 0) {
                 mEditTextSpeed.setError(getActivity().getString(R.string.invalid_field));
-                showDialoAlert(getActivity().getResources().getString(R.string.please_insert_value_greater_than_0));
+                showDialoAlert(getActivity(), getActivity().getResources().getString(R.string.please_insert_value_greater_than_0));
                 return mEditTextSpeed.getId();
             }
         }
@@ -207,31 +208,11 @@ public class InsertFragment extends Fragment {
         } else {
             if (lDirectionInt < 0 || lDirectionInt > 360) {
                 mEditTextDirection.setError(getActivity().getString(R.string.invalid_field));
-                showDialoAlert(getActivity().getResources().getString(R.string.please_insert_value_between_1_360));
+                showDialoAlert(getActivity(), getActivity().getResources().getString(R.string.please_insert_value_between_1_360));
                 return mEditTextDirection.getId();
             }
         }
         return 0;
-    }
-
-    private Integer convertStringToInteger(String aStrinNumber) {
-        Integer lInteger = null;
-        try {
-            lInteger = Integer.parseInt(aStrinNumber);
-        } catch (NumberFormatException aE) {
-            Log.e(TAG, "convertStringToInteger: " + aE.getMessage());
-            aE.printStackTrace();
-            Double lDouble = Double.valueOf(aStrinNumber);
-            lInteger = lDouble.intValue();
-        }
-        return lInteger;
-    }
-
-    private void showDialoAlert(String aMessage) {
-        AlertDialog.Builder lBuilder = new AlertDialog.Builder(getActivity());
-        lBuilder.setTitle(R.string.alert).setMessage(aMessage);
-        AlertDialog lAlertDialog = lBuilder.create();
-        lAlertDialog.show();
     }
 
     private Airplane assignValues() {

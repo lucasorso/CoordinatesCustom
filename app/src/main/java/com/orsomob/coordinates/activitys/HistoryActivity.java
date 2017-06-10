@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 
 import com.orsomob.coordinates.R;
-import com.orsomob.coordinates.activitys.adapter.AirplaneDetailsAdapter;
+import com.orsomob.coordinates.adapter.AirplaneDetailsAdapter;
 
 /**
  * Created by LucasOrso on 5/14/17.

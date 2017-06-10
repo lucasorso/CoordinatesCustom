@@ -23,5 +23,13 @@
     <string name="degree">Degree</string>
     <string name="selected">Selected</string>
     <string name="id">ID</string>
+    <string name="rotation">Rotation</string>
+    <string name="translation">Translation</string>
+    <string name="percent_translation">% Translation</string>
+    <string name="insert">Insert</string>
+
+    <string-array name="airplane_select">
+        <item>Selecet an airplane</item>
+    </string-array>
 
 </resources>

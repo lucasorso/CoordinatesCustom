@@ -1,4 +1,4 @@
-package com.orsomob.coordinates.activitys.adapter;
+package com.orsomob.coordinates.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;

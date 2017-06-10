@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -21,9 +22,13 @@ import android.widget.RelativeLayout;
 
 import com.orsomob.coordinates.GraphView;
 import com.orsomob.coordinates.R;
+import com.orsomob.coordinates.adapter.ViewPagerAdapter;
+import com.orsomob.coordinates.animations.ZoomOutPageTransformer;
 import com.orsomob.coordinates.data.module.AirplaneData;
 import com.orsomob.coordinates.data.module.AirplaneData_Table;
 import com.orsomob.coordinates.fragments.InsertFragment;
+import com.orsomob.coordinates.fragments.RotationFragment;
+import com.orsomob.coordinates.fragments.TranslationFragment;
 import com.orsomob.coordinates.module.Airplane;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
@@ -31,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity implements InsertFragment.AirplaneListener, View.OnTouchListener {
+public class MainActivity extends AppCompatActivity implements InsertFragment.AirplaneListener, RotationFragment.AirplaneRotate, TranslationFragment.AirplaneTranslate, View.OnTouchListener, View.OnLongClickListener {
 
     private static final int EDIT = 10;
     private static final int HISTORY = 20;
@@ -40,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
     private RelativeLayout mRelativeLayout;
     private GraphView mGraphView;
     private List<Airplane> mAirplaneList;
+    private ViewPager mViewPager;
 
     /**
      * Override methods
@@ -48,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main1);
         init();
     }
 
@@ -152,6 +158,16 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
         return false;
     }
 
+    @Override
+    public void onRotateAirplane(Double aX, Double aY, Double aDregree, Airplane aAirplane) {
+
+    }
+
+    @Override
+    public void onTranslateAirplane(Double aX, Double aY, Double aDregree, Airplane aAirplane) {
+
+    }
+
     /**
      * Non override methods
      */
@@ -238,9 +254,37 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
     private void getReferences() {
         mRelativeLayout = (RelativeLayout) findViewById(R.id.rl_main);
         mGraphView = (GraphView) findViewById(R.id.gf_main);
+        mViewPager = (ViewPager) findViewById(R.id.vp_main);
     }
 
-    private void setEvents() {/*Nothing*/}
+    private void setEvents() {
+        configureViewPager();
+    }
+
+    private void configureViewPager() {
+        ViewPagerAdapter lViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        lViewPagerAdapter.addFrag(new InsertFragment());
+        lViewPagerAdapter.addFrag(new RotationFragment());
+        lViewPagerAdapter.addFrag(new TranslationFragment());
+
+        mViewPager.setAdapter(lViewPagerAdapter);
+        mViewPager.offsetLeftAndRight(0);
+        mViewPager.setOffscreenPageLimit(0);
+        mViewPager.setFitsSystemWindows(true);
+        mViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {/*do nothing*/}
+
+            @Override
+            public void onPageSelected(int position) {
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {/*do nothing*/}
+        });
+    }
 
     public RelativeLayout getRootLayout() {
         return mRelativeLayout;
@@ -308,22 +352,64 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
         lSnackbar.show();
     }
 
-    private void editAirplane(Airplane aAirplane) {
-        // TODO: 6/8/17 Fazer editar avião
-    }
-
-    private void removeAirplane(Airplane aAirplane) {
+    private ImageView getAirplaneFromView(Airplane aAirplane) {
+        ImageView lImageView = null;
         Airplane lAirplane;
-        final int childCount = mRelativeLayout.getChildCount();
+        int childCount = mRelativeLayout.getChildCount();
         for (int i = 0; i < childCount; i++) {
             View lChildAt = mRelativeLayout.getChildAt(i);
             if (lChildAt instanceof ImageView) {
                 lAirplane = (Airplane) lChildAt.getTag();
                 if (Objects.equals(lAirplane.getId(), aAirplane.getId())) {
-                    mRelativeLayout.removeView(lChildAt); // Remove from screen
-                    SQLite.delete().from(AirplaneData.class).where(AirplaneData_Table.id.is(aAirplane.getId())).execute(); // Remove from dataBase
+                    lImageView = (ImageView) lChildAt;
                 }
             }
         }
+        return lImageView;
+    }
+
+    private void editAirplane(Airplane aAirplane) {
+        View lView = getAirplaneFromView(aAirplane);
+        if (lView != null) {
+
+            lView.setX(mGraphView.interpX(aAirplane.getCoordinateX()));
+            lView.setY(mGraphView.interpY(aAirplane.getCoordinateY()));
+            lView.setTag(aAirplane);
+            lView.setOnTouchListener(this);
+            lView.setOnLongClickListener(this);
+            lView.setRotation(aAirplane.getDirection());
+
+            mRelativeLayout.invalidate(); // Update RootView
+
+            AirplaneData lAirplaneData = Airplane.loadFromDataBase(aAirplane);
+            lAirplaneData.setName(aAirplane.getName());
+            lAirplaneData.setCoordinateX(Double.valueOf(aAirplane.getCoordinateX()));
+            lAirplaneData.setCoordinateY(Double.valueOf(aAirplane.getCoordinateY()));
+            lAirplaneData.setDegree(Double.valueOf(aAirplane.getDegree()));
+            lAirplaneData.setDirection(Double.valueOf(aAirplane.getDirection()));
+            lAirplaneData.setRadius(Double.valueOf(aAirplane.getRadius()));
+            lAirplaneData.setSpeed(Double.valueOf(aAirplane.getSpeed()));
+            lAirplaneData.update();
+
+        } else {
+            Log.e(TAG, "View not found to edit !");
+        }
+    }
+
+    private void removeAirplane(Airplane aAirplane) {
+        View lView = getAirplaneFromView(aAirplane);
+        if (lView != null) {
+            mRelativeLayout.removeView(lView); // Remove from screen
+            SQLite.delete().from(AirplaneData.class).where(AirplaneData_Table.id.is(aAirplane.getId())).execute(); // Remove from dataBase
+        } else {
+            Log.e(TAG, "View not found to remove !");
+        }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        // TODO: 6/10/17 Teste
+        return false;
+
     }
 }

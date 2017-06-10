@@ -1,8 +1,12 @@
 package com.orsomob.coordinates.module;
 
 import com.orsomob.coordinates.data.module.AirplaneData;
+import com.orsomob.coordinates.data.module.AirplaneData_Table;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by LucasOrso on 5/28/17.
@@ -93,6 +97,10 @@ public class Airplane implements Serializable {
         mDegree = aDegree;
     }
 
+    public static AirplaneData loadFromDataBase(Airplane aAirplane) {
+        return SQLite.select().from(AirplaneData.class).where(AirplaneData_Table.id.is(aAirplane.getId())).querySingle();
+    }
+
     public static AirplaneData saveToDatabase(Airplane aAirplane) {
         AirplaneData lAirplaneData = new AirplaneData();
 
@@ -122,6 +130,14 @@ public class Airplane implements Serializable {
         lAirplane.setRadius(aAirplaneData.getRadius().floatValue());
 
         return lAirplane;
+    }
+
+    public static List<Airplane> loadListFromDataBase(List<AirplaneData> aAirplaneDatas) {
+        List<Airplane> lAirplanes = new ArrayList<>();
+        for (AirplaneData lAirplaneData : aAirplaneDatas) {
+            lAirplanes.add(loadFromDatabase(lAirplaneData));
+        }
+        return lAirplanes;
     }
 
     @Override

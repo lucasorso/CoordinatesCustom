@@ -11,6 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <TextView
+            android:id="@+id/tx_title_insert"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_centerHorizontal="true"
+            android:text="@string/insert"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
         <Switch
             android:id="@+id/sw_main"
             android:layout_width="wrap_content"
@@ -19,6 +29,7 @@
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
             android:gravity="center"
+            android:layout_below="@id/tx_title_insert"
             android:hint="@string/type_coordinate"/>
 
         <LinearLayout
