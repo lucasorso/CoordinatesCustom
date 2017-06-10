@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity implements InsertFragment.AirplaneListener, RotationFragment.AirplaneRotate, TranslationFragment.AirplaneTranslate, View.OnTouchListener, View.OnLongClickListener {
+public class MainActivity extends AppCompatActivity implements InsertFragment.AirplaneListener, RotationFragment.AirplaneRotate, TranslationFragment.AirplaneTranslate, View.OnTouchListener {
 
     private static final int EDIT = 10;
     private static final int HISTORY = 20;
@@ -368,15 +368,14 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
         return lImageView;
     }
 
-    private void editAirplane(Airplane aAirplane) {
-        View lView = getAirplaneFromView(aAirplane);
+    private void editAirplane(final Airplane aAirplane) {
+        final View lView = getAirplaneFromView(aAirplane);
         if (lView != null) {
 
             lView.setX(mGraphView.interpX(aAirplane.getCoordinateX()));
             lView.setY(mGraphView.interpY(aAirplane.getCoordinateY()));
             lView.setTag(aAirplane);
-            lView.setOnTouchListener(this);
-            lView.setOnLongClickListener(this);
+            lView.setOnTouchListener(MainActivity.this);
             lView.setRotation(aAirplane.getDirection());
 
             mRelativeLayout.invalidate(); // Update RootView
@@ -389,7 +388,7 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
             lAirplaneData.setDirection(Double.valueOf(aAirplane.getDirection()));
             lAirplaneData.setRadius(Double.valueOf(aAirplane.getRadius()));
             lAirplaneData.setSpeed(Double.valueOf(aAirplane.getSpeed()));
-            lAirplaneData.update();
+            lAirplaneData.update(); // UpdateDabase
 
         } else {
             Log.e(TAG, "View not found to edit !");
@@ -406,10 +405,4 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
         }
     }
 
-    @Override
-    public boolean onLongClick(View v) {
-        // TODO: 6/10/17 Teste
-        return false;
-
-    }
 }

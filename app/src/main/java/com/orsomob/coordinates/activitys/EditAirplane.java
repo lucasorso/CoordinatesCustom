@@ -67,7 +67,6 @@ public class EditAirplane extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_edit: {
                 if (validateValues() == 0) {
                     assignValues();
-                    setResult(RESULT_OK);
                     Intent lIntent = new Intent();
                     Bundle lBundle = new Bundle();
                     lBundle.putSerializable("airplane", mAirplane);
@@ -137,10 +136,8 @@ public class EditAirplane extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    /*Edit*/
                     enableEdit();
                 } else {
-                    /*Not Edit*/
                     disableEdit();
                 }
             }
