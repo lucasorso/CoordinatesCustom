@@ -52,8 +52,11 @@ public class Function {
         } catch (NumberFormatException aE) {
             Log.e(TAG, "convertStringToInteger: " + aE.getMessage());
             aE.printStackTrace();
-            Double lDouble = Double.valueOf(aStrinNumber);
-            lInteger = lDouble.intValue();
+            Double lDouble;
+            if (aStrinNumber != null && !aStrinNumber.isEmpty()) {
+                lDouble = Double.valueOf(aStrinNumber);
+                lInteger = lDouble.intValue();
+            }
         }
         return lInteger;
     }

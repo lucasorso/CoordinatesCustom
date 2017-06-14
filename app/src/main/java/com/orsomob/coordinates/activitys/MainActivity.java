@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_historico:
-                startActivity(new Intent(this, HistoryActivity.class));
+                startActivityForResult(new Intent(this, HistoryActivity.class), HISTORY);
                 break;
             case R.id.menu_rotation:
                 startActivity(new Intent(this, RotationActivity.class));
