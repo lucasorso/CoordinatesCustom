@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.SpinnerAdapter;
@@ -18,7 +19,7 @@ import java.util.List;
  * Created by LucasOrso on 6/9/17.
  */
 
-public class AirplaneSpinnerAdapter extends BaseAdapter implements SpinnerAdapter {
+public class AirplaneSpinnerAdapter extends BaseAdapter implements SpinnerAdapter, AdapterView.OnItemSelectedListener {
 
     private Context mContext;
     private List<Airplane> mAirplaneList;
@@ -57,4 +58,14 @@ public class AirplaneSpinnerAdapter extends BaseAdapter implements SpinnerAdapte
         return convertView;
     }
 
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        parent.getItemAtPosition(position);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }

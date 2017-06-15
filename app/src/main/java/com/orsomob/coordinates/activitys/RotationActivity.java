@@ -21,8 +21,8 @@ import com.orsomob.coordinates.R;
  */
 
 /**
- * Only example Activity taken from the internet,
- * below contains the link and credits for the user who posted in stackoverflow
+ * Only example Activity taken from the internet.
+ * Below contains the link and credits for the user who posted in stackoverflow
  * <p>
  * Link
  * https://stackoverflow.com/questions/7795028/get-new-position-of-coordinate-after-rotation-with-matrix

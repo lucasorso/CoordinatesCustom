@@ -1,9 +1,6 @@
 package com.orsomob.coordinates.activitys;
 
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -30,6 +27,7 @@ import com.orsomob.coordinates.fragments.InsertFragment;
 import com.orsomob.coordinates.fragments.RotationFragment;
 import com.orsomob.coordinates.fragments.TranslationFragment;
 import com.orsomob.coordinates.module.Airplane;
+import com.orsomob.coordinates.util.AirplaneView;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
@@ -46,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
     private GraphView mGraphView;
     private List<Airplane> mAirplaneList;
     private ViewPager mViewPager;
+    private AirplaneView mAirplaneView;
 
     /**
      * Override methods
@@ -125,19 +124,23 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
         int id = Airplane.saveToDatabase(aAirplane).getId();
         aAirplane.setId(id);
 
-        final ImageView lImageView = new ImageView(this);
+        ImageView lImageView = new ImageView(this);
 
-        lImageView.setImageBitmap(getBitmap());
-        lImageView.setX(mGraphView.interpX(aAirplane.getCoordinateX()));
-        lImageView.setY(mGraphView.interpY(aAirplane.getCoordinateY()));
-        lImageView.setRotation(aAirplane.getDirection());
-        lImageView.setTag(aAirplane);
-        lImageView.setOnTouchListener(this);
+        lImageView = addAirplaneToView(lImageView, aAirplane);
+
+//        lImageView.setImageBitmap(mAirplaneView.getBitmap());
+//        lImageView.setX(mGraphView.interpX(aAirplane.getCoordinateX()));
+//        lImageView.setY(mGraphView.interpY(aAirplane.getCoordinateY()));
+//        lImageView.setRotation(aAirplane.getDirection());
+//        lImageView.setTag(aAirplane);
+//        lImageView.setOnTouchListener(this);
+
+        final ImageView finalLImageView = lImageView;
 
         mGraphView.post(new Runnable() {
             @Override
             public void run() {
-                mRelativeLayout.addView(lImageView);
+                mRelativeLayout.addView(finalLImageView);
             }
         });
 
@@ -164,8 +167,8 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
     }
 
     @Override
-    public void onTranslateAirplane(Double aX, Double aY, Double aDregree, Airplane aAirplane) {
-
+    public void onTranslateAirplane(Airplane aAirplane) {
+        editAirplane(aAirplane);
     }
 
     /**
@@ -173,7 +176,6 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
      */
 
     private void init() {
-        mAirplaneList = new ArrayList<>();
         getReferences();
         setEvents();
         getFromDataBase();
@@ -192,20 +194,23 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
                 if (!lAirplaneDatas.isEmpty()) {
 
                     for (AirplaneData aAirplaneData : lAirplaneDatas) {
-                        final ImageView lImageView = new ImageView(MainActivity.this);
+                        ImageView lImageView = new ImageView(MainActivity.this);
                         Airplane lAirplane = Airplane.loadFromDatabase(aAirplaneData);
 
-                        lImageView.setImageBitmap(getBitmap());
-                        lImageView.setX(mGraphView.interpX(lAirplane.getCoordinateX()));
-                        lImageView.setY(mGraphView.interpY(lAirplane.getCoordinateY()));
-                        lImageView.setRotation(lAirplane.getDirection());
-                        lImageView.setTag(lAirplane);
-                        lImageView.setOnTouchListener(MainActivity.this);
+                        lImageView = addAirplaneToView(lImageView, aAirplaneData);
 
+//                        lImageView.setImageBitmap(mAirplaneView.getBitmap());
+//                        lImageView.setX(mGraphView.interpX(lAirplane.getCoordinateX()));
+//                        lImageView.setY(mGraphView.interpY(lAirplane.getCoordinateY()));
+//                        lImageView.setRotation(lAirplane.getDirection());
+//                        lImageView.setTag(lAirplane);
+//                        lImageView.setOnTouchListener(MainActivity.this);
+
+                        final ImageView finalLImageView = lImageView;
                         mGraphView.post(new Runnable() {
                             @Override
                             public void run() {
-                                mRelativeLayout.addView(lImageView);
+                                mRelativeLayout.addView(finalLImageView);
                             }
                         });
                     }
@@ -215,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
     }
 
     private void funTest() {
-        final ImageView lImageView = new ImageView(this);
+        ImageView lImageView = new ImageView(this);
         Airplane lAirplane = new Airplane();
 
         lAirplane.setCoordinateX(5.0f);
@@ -226,14 +231,19 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
         lAirplane.setSpeed(1000.0f);
         lAirplane.setName("Airplane Teste");
 
-        lImageView.setImageBitmap(getBitmap());
-        lImageView.setX(mGraphView.interpX(lAirplane.getCoordinateX()));
-        lImageView.setY(mGraphView.interpY(lAirplane.getCoordinateY()));
-        lImageView.setRotation(lAirplane.getDirection());
-        lImageView.setTag(lAirplane);
-        lImageView.setOnTouchListener(this);
+        lImageView = addAirplaneToView(lImageView, lAirplane);
+
+//        lImageView.setImageBitmap(mAirplaneView.getBitmap());
+//        lImageView.setX(mGraphView.interpX(lAirplane.getCoordinateX()));
+//        lImageView.setY(mGraphView.interpY(lAirplane.getCoordinateY()));
+//        lImageView.setRotation(lAirplane.getDirection());
+//        lImageView.setTag(lAirplane);
+//        lImageView.setOnTouchListener(this);
 
         Handler mHandler = new Handler();
+
+        final ImageView finalLImageView = lImageView;
+
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -241,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
                     mGraphView.post(new Runnable() {
                         @Override
                         public void run() {
-                            mRelativeLayout.addView(lImageView);
+                            mRelativeLayout.addView(finalLImageView);
                         }
                     });
                 } catch (Exception e) {
@@ -252,6 +262,8 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
     }
 
     private void getReferences() {
+        mAirplaneList = new ArrayList<>();
+        mAirplaneView = new AirplaneView(this);
         mRelativeLayout = (RelativeLayout) findViewById(R.id.rl_main);
         mGraphView = (GraphView) findViewById(R.id.gf_main);
         mViewPager = (ViewPager) findViewById(R.id.vp_main);
@@ -262,9 +274,16 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
     }
 
     private void configureViewPager() {
+
+        Bundle lBundle = new Bundle();
+        lBundle.putSerializable("graph_view",  mGraphView);
+
+        RotationFragment lRotationFragment = new RotationFragment();
+        lRotationFragment.setArguments(lBundle);
+
         ViewPagerAdapter lViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         lViewPagerAdapter.addFrag(new InsertFragment());
-        lViewPagerAdapter.addFrag(new RotationFragment());
+        lViewPagerAdapter.addFrag(lRotationFragment);
         lViewPagerAdapter.addFrag(new TranslationFragment());
 
         mViewPager.setAdapter(lViewPagerAdapter);
@@ -272,63 +291,10 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
         mViewPager.setOffscreenPageLimit(0);
         mViewPager.setFitsSystemWindows(true);
         mViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
-
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {/*do nothing*/}
-
-            @Override
-            public void onPageSelected(int position) {
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {/*do nothing*/}
-        });
     }
 
     public RelativeLayout getRootLayout() {
         return mRelativeLayout;
-    }
-
-    public Bitmap getBitmap() {
-        return decodeSampledBitmapFromResource(this.getResources(), R.drawable.airplane_top, 15, 15);
-    }
-
-    private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-            // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) >= reqHeight
-                    && (halfWidth / inSampleSize) >= reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-
-        return inSampleSize;
-    }
-
-    private static Bitmap decodeSampledBitmapFromResource(Resources res, int resId, int reqWidth, int reqHeight) {
-
-        // First decode with inJustDecodeBounds=true to check dimensions
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(res, resId, options);
-
-        // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-        // Decode bitmap with inSampleSize set
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeResource(res, resId, options);
     }
 
     private void openEdit(Airplane aAirplane) {
@@ -403,6 +369,20 @@ public class MainActivity extends AppCompatActivity implements InsertFragment.Ai
         } else {
             Log.e(TAG, "View not found to remove !");
         }
+    }
+
+    private ImageView addAirplaneToView(ImageView aImageView, AirplaneData aAirplaneData) {
+        return addAirplaneToView(aImageView, Airplane.loadFromDatabase(aAirplaneData));
+    }
+
+    private ImageView addAirplaneToView(ImageView aImageView, Airplane aAirplane) {
+        aImageView.setImageBitmap(mAirplaneView.getBitmap());
+        aImageView.setX(mGraphView.interpX(aAirplane.getCoordinateX()));
+        aImageView.setY(mGraphView.interpY(aAirplane.getCoordinateY()));
+        aImageView.setRotation(aAirplane.getDirection());
+        aImageView.setTag(aAirplane);
+        aImageView.setOnTouchListener(MainActivity.this);
+        return aImageView;
     }
 
 }

@@ -11,11 +11,13 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
+import java.io.Serializable;
+
 /**
  * Created by LucasOrso on 4/2/17.
  */
 
-public class GraphView extends View {
+public class GraphView extends View implements Serializable{
 
     private static String TAG = "GraphView";
 

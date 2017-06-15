@@ -1,6 +1,8 @@
 package com.orsomob.coordinates.fragments;
 
 import android.content.Context;
+import android.graphics.Matrix;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
@@ -14,6 +16,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.orsomob.coordinates.GraphView;
 import com.orsomob.coordinates.R;
 import com.orsomob.coordinates.adapter.AirplaneSpinnerAdapter;
 import com.orsomob.coordinates.data.module.AirplaneData;
@@ -39,6 +42,7 @@ public class RotationFragment extends Fragment implements View.OnClickListener {
     private TextInputEditText mEditTextCartesianY;
     private TextInputEditText mEditTextPolarDegrees;
     private Button mButtonRotate;
+    private GraphView mGraphView;
 
     @Override
     public void onAttach(Context context) {
@@ -76,6 +80,7 @@ public class RotationFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_rotate:
+
 //                mAirplaneRotate.onRotateAirplane();
                 break;
         }
@@ -87,6 +92,7 @@ public class RotationFragment extends Fragment implements View.OnClickListener {
 
     private void init() {
         setHasOptionsMenu(true);
+        mGraphView = (GraphView) getArguments().get("graph_view");
         getReferences();
         setEvents();
         configureAdapter();
@@ -111,6 +117,14 @@ public class RotationFragment extends Fragment implements View.OnClickListener {
         mEditTextPolarDegrees = (TextInputEditText) mView.findViewById(R.id.ed_degrees);
         mButtonRotate = (Button) mView.findViewById(R.id.btn_rotate);
         mSpinner = (Spinner) mView.findViewById(R.id.sp_rotation);
+    }
+
+    private Matrix getRotationMatrix(Point aPoint, float aAngle) {
+        Matrix matrix = new Matrix();
+//        imageView.setScaleType(ImageView.ScaleType.MATRIX);   //required
+        matrix.postRotate(aAngle, aPoint.x, aPoint.y);
+//        imageView.setImageMatrix(matrix);
+        return matrix;
     }
 
 }

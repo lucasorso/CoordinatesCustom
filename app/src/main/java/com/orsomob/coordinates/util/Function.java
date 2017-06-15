@@ -8,6 +8,7 @@ import android.util.Log;
 import com.orsomob.coordinates.R;
 
 import static com.orsomob.coordinates.fragments.TranslationFragment.TAG;
+import static java.lang.Integer.parseInt;
 
 /**
  * Created by LucasOrso on 6/2/17.
@@ -48,7 +49,7 @@ public class Function {
     public static Integer convertStringToInteger(String aStrinNumber) {
         Integer lInteger = null;
         try {
-            lInteger = Integer.parseInt(aStrinNumber);
+            lInteger = parseInt(aStrinNumber);
         } catch (NumberFormatException aE) {
             Log.e(TAG, "convertStringToInteger: " + aE.getMessage());
             aE.printStackTrace();
@@ -59,6 +60,22 @@ public class Function {
             }
         }
         return lInteger;
+    }
+
+    /**
+     * @param aStrinNumber
+     * @return Float
+     */
+    public static Float convertStringToFloat(String aStrinNumber) {
+        Float lFloat = null;
+        try {
+            lFloat = Float.valueOf(aStrinNumber);
+        } catch (NumberFormatException aE) {
+            Log.e(TAG, "convertStringToFloat: " + aE.getMessage());
+            aE.printStackTrace();
+            return lFloat;
+        }
+        return lFloat;
     }
 
     /**
