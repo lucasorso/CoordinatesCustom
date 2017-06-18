@@ -179,7 +179,7 @@ public class InsertFragment extends Fragment {
             /**
              * Need to be valid to proceed
              */
-            Point lPoint = Function.convertPolarToCartesian(lRadiusInt.floatValue(), lDegreesInt.floatValue());
+            Point lPoint = convertPolarToCartesian(lRadiusInt.floatValue(), lDegreesInt.floatValue());
             if ((lPoint.x > 10 || lPoint.x < -10) &&
                     (lPoint.y > 10 || lPoint.y < -10)) {
                 mEditTextPolarDegrees.setError(getActivity().getString(R.string.invalid_field));

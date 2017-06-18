@@ -106,7 +106,7 @@ public class AirplaneDetailsAdapter extends RecyclerView.Adapter<AirplaneDetails
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 aViewHolder.itemView.setElevation(100f);
             }
-            aViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
+            aViewHolder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.colorAccent));
             Log.i(TAG, " ++ " + " Position: " + aPostion);
             mClickListener.recyclerViewListClicked(aAirplane, aPostion);
         }

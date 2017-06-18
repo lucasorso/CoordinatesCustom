@@ -15,8 +15,8 @@ import android.widget.Switch;
 
 import com.orsomob.coordinates.R;
 import com.orsomob.coordinates.module.Airplane;
-import com.orsomob.coordinates.util.Function;
 
+import static com.orsomob.coordinates.util.Function.convertCartesianToPolar;
 import static com.orsomob.coordinates.util.Function.convertStringToInteger;
 import static com.orsomob.coordinates.util.Function.showDialoAlert;
 
@@ -237,7 +237,7 @@ public class EditAirplane extends AppCompatActivity implements View.OnClickListe
         float lDirection = Float.parseFloat(mEditTextDirection.getText().toString());
         float lSpeed = Float.parseFloat(mEditTextSpeed.getText().toString());
 
-        Point lPoint = Function.convertCartesianToPolar(lCoordinateX, lCoordinateY);
+        Point lPoint = convertCartesianToPolar(lCoordinateX, lCoordinateY);
 
         mAirplane.setName(lName);
         mAirplane.setCoordinateX(lCoordinateX);

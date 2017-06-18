@@ -6,8 +6,8 @@ import android.graphics.Point;
 import android.util.Log;
 
 import com.orsomob.coordinates.R;
+import com.orsomob.coordinates.module.PointDouble;
 
-import static com.orsomob.coordinates.fragments.TranslationFragment.TAG;
 import static java.lang.Integer.parseInt;
 
 /**
@@ -15,6 +15,8 @@ import static java.lang.Integer.parseInt;
  */
 
 public class Function {
+
+    private static final String TAG = "FUNCTION";
 
     /**
      * @param aCoordX
@@ -43,7 +45,7 @@ public class Function {
     }
 
     /**
-     * @param aStrinNumber
+     * @param aStrinNumber string to format
      * @return Integer
      */
     public static Integer convertStringToInteger(String aStrinNumber) {
@@ -63,17 +65,17 @@ public class Function {
     }
 
     /**
-     * @param aStrinNumber
+     * @param aStrinNumber string to format
      * @return Float
      */
     public static Float convertStringToFloat(String aStrinNumber) {
-        Float lFloat = null;
+        Float lFloat;
         try {
             lFloat = Float.valueOf(aStrinNumber);
         } catch (NumberFormatException aE) {
             Log.e(TAG, "convertStringToFloat: " + aE.getMessage());
             aE.printStackTrace();
-            return lFloat;
+            return null;
         }
         return lFloat;
     }
@@ -87,5 +89,43 @@ public class Function {
         lBuilder.setTitle(R.string.alert).setMessage(aMessage);
         AlertDialog lAlertDialog = lBuilder.create();
         lAlertDialog.show();
+    }
+
+    /**
+     * @param aPointOfRotate the point that to rotate
+     * @param aAtualPoint    the atual point, tha want
+     * @param angle          angle to rotate
+     * @return Point with new coordinates
+     */
+    public static PointDouble rotationPoint(PointDouble aPointOfRotate, PointDouble aAtualPoint, Double angle) {
+        PointDouble lNewPoint = new PointDouble();
+
+        Log.i(TAG, "rotationPoint -aPointOfRotate- Point X:  " + aPointOfRotate.getX());
+        Log.i(TAG, "rotationPoint -aPointOfRotate- Point Y:  " + aPointOfRotate.getY());
+
+        Log.i(TAG, "rotationPoint -aAtualPoint- Point X:  " + aAtualPoint.getX());
+        Log.i(TAG, "rotationPoint -aAtualPoint- Point Y:  " + aAtualPoint.getY());
+
+        try {
+            double x1 = aAtualPoint.getX() - aPointOfRotate.getX();
+            double y1 = aAtualPoint.getY() - aPointOfRotate.getY();
+
+            double x2 = x1 * Math.cos(angle) - y1 * Math.sin(angle);
+            double y2 = x1 * Math.sin(angle) + y1 * Math.cos(angle);
+
+            Double x = x2 + aPointOfRotate.getX();
+            Double y = y2 + aPointOfRotate.getY();
+
+            lNewPoint.set(x, y);
+
+            Log.i(TAG, "rotationPoint -NewPoint- Point X:  " + lNewPoint.getX());
+            Log.i(TAG, "rotationPoint -NewPoint- Point Y:  " + lNewPoint.getY());
+
+            return lNewPoint;
+        } catch (Exception aE) {
+            aE.printStackTrace();
+            Log.e(TAG, "rotationPoint -Exception- ERROR:  " + aE.getMessage());
+            return null;
+        }
     }
 }

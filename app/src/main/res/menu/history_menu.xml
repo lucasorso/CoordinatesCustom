@@ -11,6 +11,10 @@
         android:title="Translation"/>
 
     <item
+        android:id="@+id/menu_remove"
+        android:title="Remove"/>
+
+    <item
         android:id="@+id/menu_count"
         android:title=""
         app:showAsAction="ifRoom"/>

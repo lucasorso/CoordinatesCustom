@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_main_detail_row"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/iv_airplane"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/airplane_top"/>
+
+        <TextView
+            android:id="@+id/tx_id_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_toEndOf="@+id/iv_airplane"
+            android:gravity="center_horizontal"
+            android:text="@string/id"
+            android:textStyle="bold|italic"/>
+
+        <TextView
+            android:id="@+id/tx_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/tx_id_label"
+            android:text="-111"/>
+
+        <TextView
+            android:id="@+id/tx_name_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/tx_id_label"
+            android:layout_below="@+id/tx_id_label"
+            android:layout_marginRight="5dp"
+            android:text="@string/name"/>
+
+        <TextView
+            android:id="@+id/tx_speed_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/tx_name_label"
+            android:layout_below="@+id/tx_name_label"
+            android:layout_marginRight="5dp"
+            android:text="@string/speed"/>
+
+        <TextView
+            android:id="@+id/tx_direction_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/tx_speed_label"
+            android:layout_below="@id/tx_speed_label"
+            android:layout_marginRight="5dp"
+            android:text="@string/direction"/>
+
+        <TextView
+            android:id="@+id/tx_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tx_id"
+            android:layout_toEndOf="@+id/tx_name_label"
+            android:maxLines="1"
+            android:scrollHorizontally="true"
+            android:text="Name"/>
+
+        <TextView
+            android:id="@+id/tx_speed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tx_name"
+            android:layout_toEndOf="@+id/tx_speed_label"
+            android:maxLines="1"
+            android:text="TextView"/>
+
+        <TextView
+            android:id="@+id/tx_direction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tx_direction_label"
+            android:layout_alignBottom="@+id/tx_direction_label"
+            android:layout_below="@id/tx_speed"
+            android:layout_toEndOf="@+id/tx_direction_label"
+            android:maxLines="1"
+            android:text="Speed"/>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/tx_cartesian_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cartesian"
+            android:textStyle="bold|italic"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/tx_x"/>
+
+        <TextView
+            android:id="@+id/tx_x"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tx_cartesian_title"
+            android:text="wefwef"/>
+
+        <TextView
+            android:id="@+id/tx_y"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tx_cartesian_title"
+            android:layout_marginLeft="5dp"
+            android:layout_toEndOf="@+id/tx_x"
+            android:text="wefwef"/>
+
+        <TextView
+            android:id="@+id/tx_polar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/tx_degree"
+            android:layout_below="@+id/tx_x"
+            android:text="@string/polar"
+            android:textStyle="bold|italic"/>
+
+        <TextView
+            android:id="@+id/tx_degree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tx_polar_title"
+            android:text="wefwef"/>
+
+        <TextView
+            android:id="@+id/tx_radius"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tx_polar_title"
+            android:layout_marginLeft="5dp"
+            android:layout_toEndOf="@+id/tx_degree"
+            android:text="wefwef"/>
+
+    </RelativeLayout>
+
+</LinearLayout>
+
+
