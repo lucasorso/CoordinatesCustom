@@ -1,7 +1,6 @@
 package com.orsomob.coordinates.activitys;
 
 import android.content.Intent;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +14,8 @@ import android.widget.Switch;
 
 import com.orsomob.coordinates.R;
 import com.orsomob.coordinates.module.Airplane;
+import com.orsomob.coordinates.module.PointDouble;
+import com.orsomob.coordinates.property.Option;
 
 import static com.orsomob.coordinates.util.Function.convertCartesianToPolar;
 import static com.orsomob.coordinates.util.Function.convertStringToInteger;
@@ -33,7 +34,7 @@ public class EditAirplane extends AppCompatActivity implements View.OnClickListe
     private TextInputEditText mEditTextName;
     private TextInputEditText mEditTextCartesianX;
     private TextInputEditText mEditTextCartesianY;
-    private TextInputEditText mEditTextPolarDegrees;
+    private TextInputEditText mEditTextPolarthetas;
     private TextInputEditText mEditTextPolarRadius;
     private TextInputEditText mEditTextSpeed;
     private TextInputEditText mEditTextDirection;
@@ -70,7 +71,7 @@ public class EditAirplane extends AppCompatActivity implements View.OnClickListe
                     Intent lIntent = new Intent();
                     Bundle lBundle = new Bundle();
                     lBundle.putSerializable("airplane", mAirplane);
-                    lBundle.putBoolean("edit", true);
+                    lBundle.putInt("option", Option.EDIT_AIRPLANE);
                     lIntent.putExtras(lBundle);
                     setResult(RESULT_OK, lIntent);
                     finish();
@@ -83,7 +84,7 @@ public class EditAirplane extends AppCompatActivity implements View.OnClickListe
                 Intent lIntent = new Intent();
                 Bundle lBundle = new Bundle();
                 lBundle.putSerializable("airplane", mAirplane);
-                lBundle.putBoolean("remove", true);
+                lBundle.putInt("option", Option.REMOVE_AIRPLANE);
                 lIntent.putExtras(lBundle);
                 setResult(RESULT_OK, lIntent);
                 finish();
@@ -122,7 +123,7 @@ public class EditAirplane extends AppCompatActivity implements View.OnClickListe
         mEditTextCartesianX = (TextInputEditText) findViewById(R.id.ed_x);
         mEditTextCartesianY = (TextInputEditText) findViewById(R.id.ed_y);
         mEditTextPolarRadius = (TextInputEditText) findViewById(R.id.ed_radius);
-        mEditTextPolarDegrees = (TextInputEditText) findViewById(R.id.ed_degrees);
+        mEditTextPolarthetas = (TextInputEditText) findViewById(R.id.ed_theta);
         mEditTextSpeed = (TextInputEditText) findViewById(R.id.ed_speed);
         mEditTextDirection = (TextInputEditText) findViewById(R.id.ed_direction);
         mEditButton = (Button) findViewById(R.id.btn_edit);
@@ -151,7 +152,7 @@ public class EditAirplane extends AppCompatActivity implements View.OnClickListe
         mEditTextCartesianX.setEnabled(true);
         mEditTextCartesianY.setEnabled(true);
 //        mEditTextPolarRadius.setEnabled(true);
-//        mEditTextPolarDegrees.setEnabled(true);
+//        mEditTextPolarthetas.setEnabled(true);
         mEditTextSpeed.setEnabled(true);
         mEditTextDirection.setEnabled(true);
         mEditButton.setEnabled(true);
@@ -163,7 +164,7 @@ public class EditAirplane extends AppCompatActivity implements View.OnClickListe
         mEditTextCartesianX.setEnabled(false);
         mEditTextCartesianY.setEnabled(false);
         mEditTextPolarRadius.setEnabled(false);
-        mEditTextPolarDegrees.setEnabled(false);
+        mEditTextPolarthetas.setEnabled(false);
         mEditTextSpeed.setEnabled(false);
         mEditTextDirection.setEnabled(false);
         mEditButton.setEnabled(false);
@@ -237,13 +238,13 @@ public class EditAirplane extends AppCompatActivity implements View.OnClickListe
         float lDirection = Float.parseFloat(mEditTextDirection.getText().toString());
         float lSpeed = Float.parseFloat(mEditTextSpeed.getText().toString());
 
-        Point lPoint = convertCartesianToPolar(lCoordinateX, lCoordinateY);
+        PointDouble lPoint = convertCartesianToPolar(lCoordinateX, lCoordinateY);
 
         mAirplane.setName(lName);
         mAirplane.setCoordinateX(lCoordinateX);
         mAirplane.setCoordinateY(lCoordinateY);
-        mAirplane.setRadius((float) lPoint.x);
-        mAirplane.setDegree((float) lPoint.y);
+        mAirplane.setRadius(lPoint.x.floatValue());
+        mAirplane.setTheta(lPoint.y.floatValue());
         mAirplane.setDirection(lDirection);
         mAirplane.setSpeed(lSpeed);
     }
@@ -254,7 +255,7 @@ public class EditAirplane extends AppCompatActivity implements View.OnClickListe
         mEditTextCartesianX.setText(mAirplane.getCoordinateX() != null ? String.valueOf(mAirplane.getCoordinateX()) : "");
         mEditTextCartesianY.setText(mAirplane.getCoordinateY() != null ? String.valueOf(mAirplane.getCoordinateY()) : "");
         mEditTextPolarRadius.setText(mAirplane.getRadius() != null ? String.valueOf(mAirplane.getRadius()) : "");
-        mEditTextPolarDegrees.setText(mAirplane.getDegree() != null ? String.valueOf(mAirplane.getDegree()) : "");
+        mEditTextPolarthetas.setText(mAirplane.getTheta() != null ? String.valueOf(mAirplane.getTheta()) : "");
         mEditTextSpeed.setText(mAirplane.getSpeed() != null ? String.valueOf(mAirplane.getSpeed()) : "");
         mEditTextDirection.setText(mAirplane.getDirection() != null ? String.valueOf(mAirplane.getDirection()) : "");
     }

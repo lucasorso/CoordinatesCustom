@@ -1,6 +1,5 @@
-package com.orsomob.coordinates.data.module;
+package com.orsomob.coordinates.db;
 
-import com.orsomob.coordinates.data.AppDatabase;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
@@ -11,7 +10,7 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
  */
 
 @Table(database = AppDatabase.class)
-public class AirplaneData extends BaseModel {
+public class AirplaneDB extends BaseModel {
 
     @PrimaryKey(autoincrement = true)
     @Column
@@ -36,7 +35,7 @@ public class AirplaneData extends BaseModel {
     private Double radius;
 
     @Column
-    private Double degree;
+    private Double theta;
 
     public Integer getId() {
         return id;
@@ -94,11 +93,11 @@ public class AirplaneData extends BaseModel {
         radius = aRadius;
     }
 
-    public Double getDegree() {
-        return degree;
+    public Double getTheta() {
+        return theta;
     }
 
-    public void setDegree(Double aDegree) {
-        degree = aDegree;
+    public void setTheta(Double aTheta) {
+        theta = aTheta;
     }
 }

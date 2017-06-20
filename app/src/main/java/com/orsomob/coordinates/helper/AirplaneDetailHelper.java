@@ -1,5 +1,8 @@
 package com.orsomob.coordinates.helper;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,7 +26,7 @@ public class AirplaneDetailHelper {
     private TextView mTextViewDirection;
     private TextView mTextViewX;
     private TextView mTextViewY;
-    private TextView mTextViewDegrees;
+    private TextView mTextViewthetas;
     private TextView mTextViewRadius;
     private View mView;
     private boolean isShowing;
@@ -46,7 +49,7 @@ public class AirplaneDetailHelper {
         mTextViewDirection = (TextView) mLinearLayout.findViewById(R.id.tx_direction);
         mTextViewX = (TextView) mLinearLayout.findViewById(R.id.tx_x);
         mTextViewY = (TextView) mLinearLayout.findViewById(R.id.tx_y);
-        mTextViewDegrees = (TextView) mLinearLayout.findViewById(R.id.tx_degree);
+        mTextViewthetas = (TextView) mLinearLayout.findViewById(R.id.tx_theta);
         mTextViewRadius = (TextView) mLinearLayout.findViewById(R.id.tx_radius);
     }
 
@@ -58,7 +61,7 @@ public class AirplaneDetailHelper {
         mTextViewDirection.setText(String.valueOf(mAirplane.getDirection()));
         mTextViewX.setText("X " + String.valueOf(mAirplane.getCoordinateX()));
         mTextViewY.setText("Y " + String.valueOf(mAirplane.getCoordinateY()));
-        mTextViewDegrees.setText(String.valueOf(mAirplane.getDegree()) + "º");
+        mTextViewthetas.setText(String.valueOf(mAirplane.getTheta()) + "º");
         mTextViewRadius.setText("R." + String.valueOf(mAirplane.getRadius()));
     }
 
@@ -77,5 +80,28 @@ public class AirplaneDetailHelper {
     public void setAiplane(Airplane aAirplane) {
         mAirplane = aAirplane;
         setValues();
+    }
+
+    public void animate() {
+        /**
+         * Animation working
+         */
+        if (mLinearLayout.getVisibility() == View.INVISIBLE) {
+            mLinearLayout.setVisibility(View.VISIBLE);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mLinearLayout.animate().alpha(0.0f).setDuration(800).setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            mLinearLayout.setVisibility(View.INVISIBLE);
+                            mLinearLayout.setAlpha(1.0f);
+                        }
+                    });
+
+                }
+            }, 3000);
+        }
     }
 }

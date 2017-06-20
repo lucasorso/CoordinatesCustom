@@ -135,13 +135,13 @@
             android:id="@+id/tx_polar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/tx_degree"
+            android:layout_alignStart="@+id/tx_theta"
             android:layout_below="@+id/tx_x"
             android:text="@string/polar"
             android:textStyle="bold|italic"/>
 
         <TextView
-            android:id="@+id/tx_degree"
+            android:id="@+id/tx_theta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tx_polar_title"
@@ -153,7 +153,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tx_polar_title"
             android:layout_marginLeft="5dp"
-            android:layout_toEndOf="@+id/tx_degree"
+            android:layout_toEndOf="@+id/tx_theta"
             android:text="wefwef"/>
 
     </RelativeLayout>

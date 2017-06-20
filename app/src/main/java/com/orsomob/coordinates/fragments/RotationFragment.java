@@ -1,14 +1,9 @@
 package com.orsomob.coordinates.fragments;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
-import android.graphics.Point;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,7 +34,7 @@ public class RotationFragment extends Fragment implements AirplaneTouch {
     private AirplaneRotate mAirplaneRotate;
     private TextInputEditText mEditTextCartesianX;
     private TextInputEditText mEditTextCartesianY;
-    private TextInputEditText mEditTextPolarDegrees;
+    private TextInputEditText mEditTextPolarthetas;
     private Airplane mAirplaneToSend;
     private AirplaneDetailHelper mAirplaneDetailHelper;
 
@@ -77,67 +72,35 @@ public class RotationFragment extends Fragment implements AirplaneTouch {
         switch (item.getItemId()) {
             case R.id.menu_rotate:
                 if (validateValues() == 0) {
-                    Double lCoordinateX;
-                    Double lCoordinateY;
-                    Double lDegrees;
 
-                    lCoordinateX = Double.valueOf(mEditTextCartesianX.getText().toString());
-                    lCoordinateY = Double.valueOf(mEditTextCartesianY.getText().toString());
-                    lDegrees = Double.valueOf(mEditTextPolarDegrees.getText().toString());
+                    if (mAirplaneToSend != null) {
+                        Double lCoordinateX;
+                        Double lCoordinateY;
+                        Double lTheta;
 
-                    /*Point lPointToRate = new Point();
-                    lPointToRate.set(lCoordinateX.intValue(), lCoordinateY.intValue());
+                        lCoordinateX = Double.valueOf(mEditTextCartesianX.getText().toString());
+                        lCoordinateY = Double.valueOf(mEditTextCartesianY.getText().toString());
+                        lTheta = Double.valueOf(mEditTextPolarthetas.getText().toString());
 
-                    Point lAtualPoint = new Point();
-                    lAtualPoint.set(mAirplaneToSend.getCoordinateX().intValue(), mAirplaneToSend.getCoordinateY().intValue());
+                        PointDouble lPointToRotate = new PointDouble();
+                        lPointToRotate.set(lCoordinateX, lCoordinateY);
 
-                    rotateAround(lPointToRate, lAtualPoint, lDegrees);
+                        PointDouble lAtualPoint = new PointDouble();
+                        lAtualPoint.set(mAirplaneToSend.getCoordinateX().doubleValue(), mAirplaneToSend.getCoordinateY().doubleValue());
 
-                    mAirplaneRotate.onRotateAirplane(lCoordinateX.floatValue(), lCoordinateY.floatValue(), lDegrees.floatValue(), mAirplaneToSend);*/
+                        PointDouble lNewPoint = rotationPoint(lPointToRotate, lAtualPoint, lTheta);
 
-
-                    PointDouble lPointToRotate = new PointDouble();
-                    lPointToRotate.set(lCoordinateX, lCoordinateY);
-
-                    PointDouble lAtualPoint = new PointDouble();
-                    lAtualPoint.set(mAirplaneToSend.getCoordinateX().doubleValue(), mAirplaneToSend.getCoordinateY().doubleValue());
-
-                    PointDouble lNewPoint = rotationPoint(lPointToRotate, lAtualPoint, lDegrees);
-
-                    if (lNewPoint != null) {
-                        mAirplaneRotate.onRotateAirplane(lCoordinateX.floatValue(), lCoordinateY.floatValue(), lDegrees.floatValue(), mAirplaneToSend, lNewPoint);
+                        if (lNewPoint != null) {
+                            mAirplaneRotate.onRotateAirplane(lCoordinateX.floatValue(), lCoordinateY.floatValue(), lTheta.floatValue(), mAirplaneToSend, lNewPoint);
+                        }
+                    } else {
+                        showDialoAlert(getActivity(), getActivity().getResources().getString(R.string.select_airplane_to_continue));
                     }
+
                 }
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    // TODO: 6/17/17 Remover feito para testes
-    private void rotateAround(Point center, Point point, double angle) {
-
-        /*double x1 = point.x - center.x;
-        double y1 = point.y - center.y;
-
-        double x2 = x1 * Math.cos(angle) - y1 * Math.sin(angle));
-        double y2 = x1 * Math.sin(angle) + y1 * Math.cos(angle));
-
-        point.x = x2 + center.x;
-        point.y = y2 + center.y;*/
-
-        double x1 = point.x - center.x;
-        double y1 = point.y - center.y;
-
-        double x2 = x1 * Math.cos(angle) - y1 * Math.sin(angle);
-        double y2 = x1 * Math.sin(angle) + y1 * Math.cos(angle);
-
-        point.x = (int) (x2 + center.x);
-        point.y = (int) (y2 + center.y);
-
-//        Double lNewX = (center.x + (Math.cos(Math.toRadians(angle)) * (x - center.x) - Math.sin(Math.toRadians(angle)) * (y - center.y)));
-        Log.i(TAG, "new X " + point.x);
-//        Double lNewY = (center.y + (Math.sin(Math.toRadians(angle)) * (x - center.x) + Math.cos(Math.toRadians(angle)) * (y - center.y)));
-        Log.i(TAG, "new Y " + point.y);
     }
 
     @Override
@@ -146,35 +109,8 @@ public class RotationFragment extends Fragment implements AirplaneTouch {
 
         mAirplaneDetailHelper.setAiplane(aAirplane);
 
-        if (mAirplaneDetailHelper.getLayout().getVisibility() == View.INVISIBLE){
-            mAirplaneDetailHelper.getLayout().setVisibility(View.VISIBLE);
-        }
+        mAirplaneDetailHelper.animate();
 
-        //up
-        //mAirplaneDetailHelper.getLayout().animate().translationY(0).setDuration(5000);
-        //down
-        //mAirplaneDetailHelper.getLayout().animate().translationY(mAirplaneDetailHelper.getLayout().getHeight()).alpha(1.0f).setDuration(3000);
-
-        /**
-         * Animation working
-         */
-        if (mAirplaneDetailHelper.getLayout().getVisibility() == View.INVISIBLE) {
-            mAirplaneDetailHelper.getLayout().setVisibility(View.VISIBLE);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mAirplaneDetailHelper.getLayout().animate().alpha(0.0f).setDuration(1000).setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            mAirplaneDetailHelper.getLayout().setVisibility(View.INVISIBLE);
-                            mAirplaneDetailHelper.getLayout().setAlpha(1.0f);
-                        }
-                    });
-
-                }
-            }, 3000);
-        }
     }
 
     public interface AirplaneRotate {
@@ -184,13 +120,17 @@ public class RotationFragment extends Fragment implements AirplaneTouch {
     private void init() {
         setHasOptionsMenu(true);
         getReferences();
+        setEvents();
     }
 
     public void getReferences() {
         mEditTextCartesianX = (TextInputEditText) mView.findViewById(R.id.ed_x);
         mEditTextCartesianY = (TextInputEditText) mView.findViewById(R.id.ed_y);
-        mEditTextPolarDegrees = (TextInputEditText) mView.findViewById(R.id.ed_degrees);
+        mEditTextPolarthetas = (TextInputEditText) mView.findViewById(R.id.ed_theta);
         mAirplaneDetailHelper = new AirplaneDetailHelper(mView);
+    }
+
+    private void setEvents() {
         mAirplaneDetailHelper.getLayout().setVisibility(View.INVISIBLE);
     }
 
@@ -198,7 +138,7 @@ public class RotationFragment extends Fragment implements AirplaneTouch {
 
         String lX;
         String lY;
-        String lDegrees;
+        String lTheta;
 
         lX = mEditTextCartesianX.getText().toString();
         Integer lXint = convertStringToInteger(lX);
@@ -224,11 +164,11 @@ public class RotationFragment extends Fragment implements AirplaneTouch {
                 return mEditTextCartesianX.getId();
             }
         }
-        lDegrees = mEditTextPolarDegrees.getText().toString();
-        Integer lDegreesInt = convertStringToInteger(lDegrees);
-        if (lDegrees.isEmpty() && lDegreesInt == null) {
-            mEditTextPolarDegrees.setError(getActivity().getString(R.string.invalid_field));
-            return mEditTextPolarDegrees.getId();
+        lTheta = mEditTextPolarthetas.getText().toString();
+        Integer lThetaInt = convertStringToInteger(lTheta);
+        if (lTheta.isEmpty() && lThetaInt == null) {
+            mEditTextPolarthetas.setError(getActivity().getString(R.string.invalid_field));
+            return mEditTextPolarthetas.getId();
         }
         return 0;
     }

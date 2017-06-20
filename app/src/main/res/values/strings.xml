@@ -11,8 +11,8 @@
     <string name="please_insert_value_greater_than_0">Please enter a value greater than 0</string>
     <string name="max_value_10">Please enter a value between -10 and 10 !</string>
     <string name="the_polar_coordinate_is_not_valid">The polar coordinate inserted is not valid !\nCoordinate X = %1$d\nCoorinate Y = %2$d</string>
+    <string name="the_percent_is_not_valid">The percent inserted is not valid !\nCoordinate X = %1$d\nCoorinate Y = %2$d</string>
     <string name="airplane">Airplane</string>
-    <string name="angle">Angle</string>
     <string name="speed">Speed</string>
     <string name="direction">Direction</string>
     <string name="name">Name</string>
@@ -20,16 +20,39 @@
     <string name="preference_file_key">coordinates</string>
     <string name="cartesian">Cartesian</string>
     <string name="polar">Polar</string>
-    <string name="degree">Degree</string>
+    <string name="theta">Theta</string>
     <string name="selected">Selected</string>
     <string name="id">ID</string>
     <string name="rotation">Rotation</string>
     <string name="translation">Translation</string>
     <string name="percent_translation">% Translation</string>
     <string name="insert">Insert</string>
+    <string name="select_airplane_to_continue">Please, select an airplane to continue !</string>
 
     <string-array name="airplane_select">
+        <item>Bansheespark</item>
+        <item>Swiftbolt</item>
+        <item>Driftstorm</item>
+        <item>Nightfire</item>
+        <item>Darkbullet</item>
+        <item>Dark Dragon</item>
+        <item>Swift Rocket</item>
+        <item>Mad Mommy</item>
         <item>Selecet an airplane</item>
+        <item>Silver Dragon</item>
+        <item>Selecet an airplane</item>
+        <item>Light Vulture</item>
+        <item>Wildraid</item>
+        <item>Cloudurge</item>
+        <item>Brasscomet</item>
+        <item>Shadowfreak</item>
+        <item>Blind Bomber</item>
+        <item>Brightscream</item>
+        <item>Smooth Bee</item>
+        <item>False Moth</item>
+        <item>Smooth Condor</item>
+        <item>Lone Banshee</item>
+        <item>Get plane names</item>
     </string-array>
 
 </resources>

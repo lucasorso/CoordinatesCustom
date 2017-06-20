@@ -1,7 +1,6 @@
 package com.orsomob.coordinates;
 
-import android.graphics.Point;
-
+import com.orsomob.coordinates.module.PointDouble;
 import com.orsomob.coordinates.util.Function;
 
 import org.junit.Test;
@@ -20,12 +19,12 @@ public class AirplaneTest {
     @Test
     @Config(sdk = 23)
     public void cartesianToPolar() {
-        Point lPoint = Function.convertCartesianToPolar(5f, -4f);
+        PointDouble lPoint = Function.convertCartesianToPolar(5f, -4f);
     }
 
     @Test
     @Config(sdk = 23)
     public void polarToCartesina() {
-        Point lPoint = Function.convertPolarToCartesian(5f, 60f);
+        PointDouble lPoint = Function.convertPolarToCartesian(5.0, 60.0);
     }
 }

@@ -20,20 +20,11 @@
             android:textSize="16sp"
             android:textStyle="bold"/>
 
-        <Spinner
-            android:id="@+id/sp_rotation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tx_title_translation"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"
-            android:entries="@array/airplane_select"/>
-
         <android.support.design.widget.TextInputLayout
             android:id="@+id/textInputLayout13"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_below="@id/sp_rotation"
+            android:layout_below="@id/tx_title_translation"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="3dp"
             android:hint="@string/percent_translation">
@@ -47,6 +38,14 @@
                 android:maxLength="7"/>
 
         </android.support.design.widget.TextInputLayout>
+
+        <include
+            android:id="@+id/include_detail"
+            layout="@layout/row_airplane_detail_frag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textInputLayout13"
+            android:visibility="visible"/>
 
     </RelativeLayout>
 

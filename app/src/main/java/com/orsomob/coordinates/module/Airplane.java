@@ -1,7 +1,7 @@
 package com.orsomob.coordinates.module;
 
-import com.orsomob.coordinates.data.module.AirplaneData;
-import com.orsomob.coordinates.data.module.AirplaneData_Table;
+import com.orsomob.coordinates.db.AirplaneDB;
+import com.orsomob.coordinates.db.AirplaneDB_Table;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.io.Serializable;
@@ -15,11 +15,9 @@ import java.util.List;
 
 public class Airplane implements Serializable {
 
-    public static String sAirplane = "Airplane";
-
     private Integer mId;
 
-    private String mName = sAirplane;
+    private String mName;
 
     private Float mDirection;
 
@@ -31,7 +29,7 @@ public class Airplane implements Serializable {
 
     private Float mRadius;
 
-    private Float mDegree;
+    private Float mTheta;
 
     public Integer getId() {
         return mId;
@@ -89,53 +87,58 @@ public class Airplane implements Serializable {
         mRadius = aRadius;
     }
 
-    public Float getDegree() {
-        return mDegree;
+    public Float getTheta() {
+        return mTheta;
     }
 
-    public void setDegree(Float aDegree) {
-        mDegree = aDegree;
+    public void setTheta(Float aTheta) {
+        mTheta = aTheta;
     }
 
-    public static AirplaneData loadFromDataBase(Airplane aAirplane) {
-        return SQLite.select().from(AirplaneData.class).where(AirplaneData_Table.id.is(aAirplane.getId())).querySingle();
+    public static AirplaneDB loadFromDataBase(Airplane aAirplane) {
+        return SQLite.select().from(AirplaneDB.class).where(AirplaneDB_Table.id.is(aAirplane.getId())).querySingle();
     }
 
-    public static AirplaneData saveToDatabase(Airplane aAirplane) {
-        AirplaneData lAirplaneData = new AirplaneData();
-
-        lAirplaneData.setName(aAirplane.getName());
-        lAirplaneData.setCoordinateX(aAirplane.getCoordinateX().doubleValue());
-        lAirplaneData.setCoordinateY(aAirplane.getCoordinateY().doubleValue());
-        lAirplaneData.setSpeed(aAirplane.getSpeed().doubleValue());
-        lAirplaneData.setDirection(aAirplane.getDirection().doubleValue());
-        lAirplaneData.setDegree(aAirplane.getDegree().doubleValue());
-        lAirplaneData.setRadius(aAirplane.getRadius().doubleValue());
-
-        lAirplaneData.save();
-
-        return lAirplaneData;
+    public static Airplane loadAirplaneFromDataBase(Airplane aAirplane) {
+        AirplaneDB lAirplaneDB = SQLite.select().from(AirplaneDB.class).where(AirplaneDB_Table.id.is(aAirplane.getId())).querySingle();
+        return loadFromDatabase(lAirplaneDB);
     }
 
-    public static Airplane loadFromDatabase(AirplaneData aAirplaneData) {
+    public static AirplaneDB saveToDatabase(Airplane aAirplane) {
+        AirplaneDB lAirplaneDB = new AirplaneDB();
+
+        lAirplaneDB.setName(aAirplane.getName());
+        lAirplaneDB.setCoordinateX(aAirplane.getCoordinateX().doubleValue());
+        lAirplaneDB.setCoordinateY(aAirplane.getCoordinateY().doubleValue());
+        lAirplaneDB.setSpeed(aAirplane.getSpeed().doubleValue());
+        lAirplaneDB.setDirection(aAirplane.getDirection().doubleValue());
+        lAirplaneDB.setTheta(aAirplane.getTheta().doubleValue());
+        lAirplaneDB.setRadius(aAirplane.getRadius().doubleValue());
+
+        lAirplaneDB.save();
+
+        return lAirplaneDB;
+    }
+
+    public static Airplane loadFromDatabase(AirplaneDB aAirplaneDB) {
         Airplane lAirplane = new Airplane();
 
-        lAirplane.setId(aAirplaneData.getId());
-        lAirplane.setName(aAirplaneData.getName());
-        lAirplane.setCoordinateX(aAirplaneData.getCoordinateX().floatValue());
-        lAirplane.setCoordinateY(aAirplaneData.getCoordinateY().floatValue());
-        lAirplane.setSpeed(aAirplaneData.getSpeed().floatValue());
-        lAirplane.setDirection(aAirplaneData.getDirection().floatValue());
-        lAirplane.setDegree(aAirplaneData.getDegree().floatValue());
-        lAirplane.setRadius(aAirplaneData.getRadius().floatValue());
+        lAirplane.setId(aAirplaneDB.getId());
+        lAirplane.setName(aAirplaneDB.getName());
+        lAirplane.setCoordinateX(aAirplaneDB.getCoordinateX().floatValue());
+        lAirplane.setCoordinateY(aAirplaneDB.getCoordinateY().floatValue());
+        lAirplane.setSpeed(aAirplaneDB.getSpeed().floatValue());
+        lAirplane.setDirection(aAirplaneDB.getDirection().floatValue());
+        lAirplane.setTheta(aAirplaneDB.getTheta().floatValue());
+        lAirplane.setRadius(aAirplaneDB.getRadius().floatValue());
 
         return lAirplane;
     }
 
-    public static List<Airplane> loadListFromDataBase(List<AirplaneData> aAirplaneDatas) {
+    public static List<Airplane> loadListFromDataBase(List<AirplaneDB> aAirplaneDBs) {
         List<Airplane> lAirplanes = new ArrayList<>();
-        for (AirplaneData lAirplaneData : aAirplaneDatas) {
-            lAirplanes.add(loadFromDatabase(lAirplaneData));
+        for (AirplaneDB lAirplaneDB : aAirplaneDBs) {
+            lAirplanes.add(loadFromDatabase(lAirplaneDB));
         }
         return lAirplanes;
     }

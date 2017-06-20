@@ -1,7 +1,6 @@
 package com.orsomob.coordinates.fragments;
 
 import android.content.Context;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
@@ -18,11 +17,13 @@ import android.widget.Switch;
 
 import com.orsomob.coordinates.R;
 import com.orsomob.coordinates.module.Airplane;
-import com.orsomob.coordinates.util.Function;
+import com.orsomob.coordinates.module.PointDouble;
 
+import static com.orsomob.coordinates.util.Function.convertCartesianToPolar;
 import static com.orsomob.coordinates.util.Function.convertPolarToCartesian;
 import static com.orsomob.coordinates.util.Function.convertStringToInteger;
 import static com.orsomob.coordinates.util.Function.showDialoAlert;
+import static java.lang.Float.parseFloat;
 
 /**
  * Created by LucasOrso on 5/14/17.
@@ -38,8 +39,8 @@ public class InsertFragment extends Fragment {
     private LinearLayout mLayoutPolar;
     private TextInputEditText mEditTextCartesianX;
     private TextInputEditText mEditTextCartesianY;
-    private TextInputEditText mEditTextPolarRadius;
-    private TextInputEditText mEditTextPolarDegrees;
+    private TextInputEditText mEditTextRadius;
+    private TextInputEditText mEditTextTheta;
     private TextInputEditText mEditTextSpeed;
     private TextInputEditText mEditTextDirection;
     private AirplaneListener mAirplaneListener;
@@ -120,8 +121,8 @@ public class InsertFragment extends Fragment {
         mLayoutPolar = (LinearLayout) mView.findViewById(R.id.ll_polar);
         mEditTextCartesianX = (TextInputEditText) mView.findViewById(R.id.ed_x);
         mEditTextCartesianY = (TextInputEditText) mView.findViewById(R.id.ed_y);
-        mEditTextPolarRadius = (TextInputEditText) mView.findViewById(R.id.ed_radius);
-        mEditTextPolarDegrees = (TextInputEditText) mView.findViewById(R.id.ed_degrees);
+        mEditTextRadius = (TextInputEditText) mView.findViewById(R.id.ed_radius);
+        mEditTextTheta = (TextInputEditText) mView.findViewById(R.id.ed_theta);
         mEditTextSpeed = (TextInputEditText) mView.findViewById(R.id.ed_speed);
         mEditTextDirection = (TextInputEditText) mView.findViewById(R.id.ed_direction);
     }
@@ -131,7 +132,7 @@ public class InsertFragment extends Fragment {
         String lCartesianX;
         String lCartesianY;
         String lRadius;
-        String lDegrees;
+        String lTheta;
         String lSpeed;
         String lDirection;
 
@@ -164,26 +165,26 @@ public class InsertFragment extends Fragment {
             /**
              * This means is a polar coordinates has inserted
              */
-            lRadius = mEditTextPolarRadius.getText().toString();
+            lRadius = mEditTextRadius.getText().toString();
             Integer lRadiusInt = convertStringToInteger(lRadius);
             if (lRadius.isEmpty() && lRadiusInt == null) {
-                mEditTextPolarRadius.setError(getActivity().getString(R.string.invalid_field));
-                return mEditTextPolarRadius.getId();
+                mEditTextRadius.setError(getActivity().getString(R.string.invalid_field));
+                return mEditTextRadius.getId();
             }
-            lDegrees = mEditTextPolarDegrees.getText().toString();
-            Integer lDegreesInt = convertStringToInteger(lDegrees);
-            if (lDegrees.isEmpty() && lDegreesInt == null) {
-                mEditTextPolarDegrees.setError(getActivity().getString(R.string.invalid_field));
-                return mEditTextPolarDegrees.getId();
+            lTheta = mEditTextTheta.getText().toString();
+            Integer lThetaInt = convertStringToInteger(lTheta);
+            if (lTheta.isEmpty() && lThetaInt == null) {
+                mEditTextTheta.setError(getActivity().getString(R.string.invalid_field));
+                return mEditTextTheta.getId();
             }
             /**
              * Need to be valid to proceed
              */
-            Point lPoint = convertPolarToCartesian(lRadiusInt.floatValue(), lDegreesInt.floatValue());
-            if ((lPoint.x > 10 || lPoint.x < -10) &&
+            PointDouble lPoint = convertPolarToCartesian(lRadiusInt.doubleValue(), lThetaInt.doubleValue());
+            if ((lPoint.x > 10 || lPoint.x < -10) ||
                     (lPoint.y > 10 || lPoint.y < -10)) {
-                mEditTextPolarDegrees.setError(getActivity().getString(R.string.invalid_field));
-                mEditTextPolarRadius.setError(getActivity().getString(R.string.invalid_field));
+                mEditTextTheta.setError(getActivity().getString(R.string.invalid_field));
+                mEditTextRadius.setError(getActivity().getString(R.string.invalid_field));
                 showDialoAlert(getActivity(), String.format(getActivity().getResources().getString(R.string.the_polar_coordinate_is_not_valid), lPoint.x, lPoint.y));
                 return -1;
             }
@@ -217,34 +218,34 @@ public class InsertFragment extends Fragment {
 
     private Airplane assignValues() {
         Airplane lAirplane = new Airplane();
-        Point lPoint;
+        PointDouble lPoint;
 
         float lCoordinateX;
         float lCoordinateY;
-        float lRadius;
-        float lDegrees;
-        float lDirection = Float.parseFloat(mEditTextDirection.getText().toString());
-        float lSpeed = Float.parseFloat(mEditTextSpeed.getText().toString());
+        Double lRadius;
+        Double lTheta;
+        float lDirection = parseFloat(mEditTextDirection.getText().toString());
+        float lSpeed = parseFloat(mEditTextSpeed.getText().toString());
 
 
         if (mLayoutCartesian.getVisibility() == View.VISIBLE) {
-            lCoordinateX = Float.parseFloat(mEditTextCartesianX.getText().toString());
-            lCoordinateY = Float.parseFloat(mEditTextCartesianY.getText().toString());
-            lPoint = Function.convertCartesianToPolar(lCoordinateX, lCoordinateY);
-            lDegrees = lPoint.x;
-            lRadius = lPoint.y;
+            lCoordinateX = parseFloat(mEditTextCartesianX.getText().toString());
+            lCoordinateY = parseFloat(mEditTextCartesianY.getText().toString());
+            lPoint = convertCartesianToPolar(lCoordinateX, lCoordinateY);
+            lRadius = lPoint.x;
+            lTheta = lPoint.y;
         } else {
-            lDegrees = Float.parseFloat(mEditTextPolarDegrees.getText().toString());
-            lRadius = Float.parseFloat(mEditTextPolarRadius.getText().toString());
-            lPoint = convertPolarToCartesian(lRadius, lDegrees);
-            lCoordinateX = lPoint.x;
-            lCoordinateY = lPoint.y;
+            lRadius = Double.valueOf(mEditTextRadius.getText().toString());
+            lTheta = Double.valueOf(mEditTextTheta.getText().toString());
+            lPoint = convertPolarToCartesian(lRadius, lTheta);
+            lCoordinateX = lPoint.x.floatValue();
+            lCoordinateY = lPoint.y.floatValue();
         }
 
         lAirplane.setCoordinateX(lCoordinateX);
         lAirplane.setCoordinateY(lCoordinateY);
-        lAirplane.setDegree(lDegrees);
-        lAirplane.setRadius(lRadius);
+        lAirplane.setTheta(lTheta.floatValue());
+        lAirplane.setRadius(lRadius.floatValue());
         lAirplane.setDirection(lDirection);
         lAirplane.setSpeed(lSpeed);
 
@@ -255,8 +256,8 @@ public class InsertFragment extends Fragment {
         mSwitchTypeCoordinate.setText("");
         mEditTextCartesianX.setText("");
         mEditTextCartesianY.setText("");
-        mEditTextPolarRadius.setText("");
-        mEditTextPolarDegrees.setText("");
+        mEditTextRadius.setText("");
+        mEditTextTheta.setText("");
         mEditTextSpeed.setText("");
         mEditTextDirection.setText("");
     }

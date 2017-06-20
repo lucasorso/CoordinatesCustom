@@ -132,12 +132,12 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/tx_degree_label"
+                    android:id="@+id/tx_theta_label"
                     android:gravity="center"
-                    android:text="@string/degree"/>
+                    android:text="@string/theta"/>
 
                 <TextView
-                    android:id="@+id/tx_degree"
+                    android:id="@+id/tx_theta"
                     android:text="45"/>
 
                 <TextView

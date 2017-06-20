@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.orsomob.coordinates.R;
-import com.orsomob.coordinates.data.module.AirplaneData;
+import com.orsomob.coordinates.db.AirplaneDB;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import java.util.List;
 public class AirplaneDetailsAdapter extends RecyclerView.Adapter<AirplaneDetailsAdapter.ViewHolder> {
 
     private static String TAG = "AIRPLANE_DETAIL_ADAPTER";
-    private List<AirplaneData> mAirplaneDataList;
+    private List<AirplaneDB> mAirplaneDBList;
     private ActionBar mActionBar;
     private static RecyclerViewClickListener mClickListener;
     private SparseBooleanArray selectedItems;
@@ -43,7 +43,7 @@ public class AirplaneDetailsAdapter extends RecyclerView.Adapter<AirplaneDetails
         mContext = aContext;
         mActionBar = aSupportActionBar;
         mClickListener = aClickListener;
-        mAirplaneDataList = SQLite.select().from(AirplaneData.class).queryList();
+        mAirplaneDBList = SQLite.select().from(AirplaneDB.class).queryList();
         selectedItems = new SparseBooleanArray();
     }
 
@@ -55,7 +55,7 @@ public class AirplaneDetailsAdapter extends RecyclerView.Adapter<AirplaneDetails
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        final AirplaneData lAirplane = mAirplaneDataList.get(position);
+        final AirplaneDB lAirplane = mAirplaneDBList.get(position);
 
         holder.mTextId.setText(lAirplane.getId() != null ? lAirplane.getId().toString() : "");
         holder.mTextViewName.setText(lAirplane.getName() != null ? lAirplane.getName() : "");
@@ -63,7 +63,7 @@ public class AirplaneDetailsAdapter extends RecyclerView.Adapter<AirplaneDetails
         holder.mTextViewCartesianX.setText(lAirplane.getCoordinateX() != null ? String.valueOf(lAirplane.getCoordinateX()) : "");
         holder.mTextViewCartesianY.setText(lAirplane.getCoordinateY() != null ? String.valueOf(lAirplane.getCoordinateY()) : "");
         holder.mTextViewPolarRadius.setText(lAirplane.getRadius() != null ? String.valueOf(lAirplane.getRadius()) : "");
-        holder.mTextViewPolarDegrees.setText(lAirplane.getDegree() != null ? String.valueOf(lAirplane.getDegree()) : "");
+        holder.mTextViewPolarthetas.setText(lAirplane.getTheta() != null ? String.valueOf(lAirplane.getTheta()) : "");
         holder.mTextViewSpeed.setText(lAirplane.getSpeed() != null ? String.valueOf(lAirplane.getSpeed()) : "");
         holder.mTextViewDirection.setText(lAirplane.getDirection() != null ? String.valueOf(lAirplane.getDirection()) : "");
 
@@ -77,13 +77,13 @@ public class AirplaneDetailsAdapter extends RecyclerView.Adapter<AirplaneDetails
 
     @Override
     public int getItemCount() {
-        return mAirplaneDataList.size();
+        return mAirplaneDBList.size();
     }
 
     public interface RecyclerViewClickListener {
-        void recyclerViewListClicked(AirplaneData aAirplaneData, int aPosition);
+        void recyclerViewListClicked(AirplaneDB aAirplaneDB, int aPosition);
 
-        void recyclerViewListUnClicked(AirplaneData aAirplaneData, int aPosition);
+        void recyclerViewListUnClicked(AirplaneDB aAirplaneDB, int aPosition);
     }
 
     /**
@@ -92,7 +92,7 @@ public class AirplaneDetailsAdapter extends RecyclerView.Adapter<AirplaneDetails
      * @param aPostion  Position of the item to toggle the selection status for
      * @param aAirplane Send to add or remove from list of activity
      */
-    private void toggleSelection(int aPostion, ViewHolder aViewHolder, AirplaneData aAirplane) {
+    private void toggleSelection(int aPostion, ViewHolder aViewHolder, AirplaneDB aAirplane) {
         if (selectedItems.get(aPostion, false)) {
             selectedItems.delete(aPostion);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -163,7 +163,7 @@ public class AirplaneDetailsAdapter extends RecyclerView.Adapter<AirplaneDetails
         private TextView mTextId;
         private TextView mTextViewCartesianX;
         private TextView mTextViewCartesianY;
-        private TextView mTextViewPolarDegrees;
+        private TextView mTextViewPolarthetas;
         private TextView mTextViewPolarRadius;
         private TextView mTextViewSpeed;
         private TextView mTextViewDirection;
@@ -177,7 +177,7 @@ public class AirplaneDetailsAdapter extends RecyclerView.Adapter<AirplaneDetails
             mTextViewCartesianX = (TextView) itemView.findViewById(R.id.tx_x);
             mTextViewCartesianY = (TextView) itemView.findViewById(R.id.tx_y);
             mTextViewPolarRadius = (TextView) itemView.findViewById(R.id.tx_radius);
-            mTextViewPolarDegrees = (TextView) itemView.findViewById(R.id.tx_degree);
+            mTextViewPolarthetas = (TextView) itemView.findViewById(R.id.tx_theta);
             mTextViewSpeed = (TextView) itemView.findViewById(R.id.tx_speed);
             mTextViewDirection = (TextView) itemView.findViewById(R.id.tx_direction);
             mImageViewAirplane = (ImageView) itemView.findViewById(R.id.iv_airplane);

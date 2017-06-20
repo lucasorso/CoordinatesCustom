@@ -1,4 +1,4 @@
-package com.orsomob.coordinates.data;
+package com.orsomob.coordinates.db;
 
 import com.raizlabs.android.dbflow.annotation.Database;
 

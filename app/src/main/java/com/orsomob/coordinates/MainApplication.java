@@ -15,6 +15,7 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
         FlowManager.init(new FlowConfig.Builder(this).build());
+
     }
 
     @Override

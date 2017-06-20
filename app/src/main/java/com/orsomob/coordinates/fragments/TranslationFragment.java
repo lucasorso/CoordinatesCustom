@@ -11,13 +11,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.orsomob.coordinates.R;
 import com.orsomob.coordinates.activitys.MainActivity;
+import com.orsomob.coordinates.helper.AirplaneDetailHelper;
 import com.orsomob.coordinates.interfaces.AirplaneTouch;
 import com.orsomob.coordinates.module.Airplane;
-import com.orsomob.coordinates.util.Function;
+import com.orsomob.coordinates.module.PointDouble;
+
+import static com.orsomob.coordinates.util.Function.showDialoAlert;
+import static com.orsomob.coordinates.util.Function.translatePoint;
 
 /**
  * Created by LucasOrso on 5/14/17.
@@ -31,6 +34,7 @@ public class TranslationFragment extends Fragment implements AirplaneTouch {
     private AirplaneTranslate mAirplaneTranslate;
     private TextInputEditText mEditTextPertcent;
     private Airplane mAirplaneToSend;
+    private AirplaneDetailHelper mAirplaneDetailHelper;
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -65,8 +69,17 @@ public class TranslationFragment extends Fragment implements AirplaneTouch {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_translation:
-                Airplane lAirplane = updateCoordinates(mEditTextPertcent.getText().toString());
-                mAirplaneTranslate.onTranslateAirplane(lAirplane);
+
+                if (mAirplaneToSend != null) {
+                    PointDouble lPointDouble = updateCoordinates(mEditTextPertcent.getText().toString());
+                    if (lPointDouble != null) {
+                        mAirplaneToSend.setCoordinateX(lPointDouble.getX().floatValue());
+                        mAirplaneToSend.setCoordinateY(lPointDouble.getY().floatValue());
+                        mAirplaneTranslate.onTranslateAirplane(mAirplaneToSend);
+                    }
+                } else {
+                    showDialoAlert(getActivity(), getActivity().getResources().getString(R.string.select_airplane_to_continue));
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -74,24 +87,25 @@ public class TranslationFragment extends Fragment implements AirplaneTouch {
 
     @Override
     public void onAirplaneTouch(Airplane aAirplane) {
-        Toast.makeText(getActivity(), "Translation Fragment", Toast.LENGTH_SHORT).show();
         mAirplaneToSend = aAirplane;
+
+        mAirplaneDetailHelper.setAiplane(aAirplane);
+
+        mAirplaneDetailHelper.animate();
+
     }
 
-    private Airplane updateCoordinates(String aValue) {
-        // TODO: 6/14/17 Realizar tratamento para não sai da tela.
-        Float lfloatValue = Function.convertStringToFloat(aValue);
-        if (lfloatValue != null) {
-            Float lPercent = lfloatValue / 100;
-
-            float lCoordX = mAirplaneToSend.getCoordinateX() + (mAirplaneToSend.getCoordinateX() * lPercent);
-            float lCoordY = mAirplaneToSend.getCoordinateX() + (mAirplaneToSend.getCoordinateY() * lPercent);
-
-            mAirplaneToSend.setCoordinateX(lCoordX);
-            mAirplaneToSend.setCoordinateY(lCoordY);
-
+    private PointDouble updateCoordinates(String aValue) {
+        // DONE: 6/14/17 Realizar tratamento para não sai da tela.
+        PointDouble lPointDouble = translatePoint(mAirplaneToSend, aValue);
+        if (lPointDouble != null) {
+            if (lPointDouble.getX() > 10 || lPointDouble.getX() < -10 ||
+                    lPointDouble.getY() > 10 || lPointDouble.getY() < -10) {
+                showDialoAlert(getActivity(), String.format(getActivity().getResources().getString(R.string.the_percent_is_not_valid), lPointDouble.x.intValue(), lPointDouble.y.intValue()));
+                return null;
+            }
         }
-        return mAirplaneToSend;
+        return lPointDouble;
     }
 
     public interface AirplaneTranslate {
@@ -102,16 +116,17 @@ public class TranslationFragment extends Fragment implements AirplaneTouch {
         setHasOptionsMenu(true);
         getReferences();
         setEvents();
-
     }
 
     private void setEvents() {
         mEditTextPertcent.setInputType(InputType.TYPE_CLASS_NUMBER);
         mEditTextPertcent.setText("0");
+        mAirplaneDetailHelper.getLayout().setVisibility(View.INVISIBLE);
     }
 
     public void getReferences() {
         mEditTextPertcent = (TextInputEditText) mView.findViewById(R.id.ed_percent);
+        mAirplaneDetailHelper = new AirplaneDetailHelper(mView);
     }
 
 }

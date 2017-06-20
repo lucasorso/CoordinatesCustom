@@ -13,7 +13,7 @@ import com.orsomob.coordinates.R;
 
 public class AirplaneView {
 
-    Context mContext;
+    private Context mContext;
 
     public AirplaneView(Context aContext) {
         mContext = aContext;

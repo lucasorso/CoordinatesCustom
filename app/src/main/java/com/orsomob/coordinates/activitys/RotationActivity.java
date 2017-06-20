@@ -92,12 +92,12 @@ public class RotationActivity extends AppCompatActivity implements SeekBar.OnSee
          * <p>
          * A new point, with the rotated coordinates will be returned
          *
-         * @param degrees
+         * @param thetas
          * @return
          */
-        public Point rotate(float degrees) {
+        public Point rotate(float thetas) {
             // This is to rotate about the Rectangles center
-            transform.setRotate(degrees, myRect.exactCenterX(), myRect.exactCenterY());
+            transform.setRotate(thetas, myRect.exactCenterX(), myRect.exactCenterY());
 
             // Create new float[] to hold the rotated coordinates
             float[] pts = new float[2];
